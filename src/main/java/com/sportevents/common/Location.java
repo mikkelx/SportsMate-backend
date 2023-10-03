@@ -2,12 +2,10 @@ package com.sportevents.common;
 
 import com.sportevents.event.Event;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Table
 @Entity
+@ToString
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +23,5 @@ public class Location {
     private Float lng;
 
     @OneToMany(mappedBy = "location")
-    private Set<Event> events;
+    private List<Event> events = new ArrayList<>();
 }

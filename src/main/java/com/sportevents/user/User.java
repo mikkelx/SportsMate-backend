@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Table
 @Entity
@@ -22,8 +21,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    private String username;
+    private String email;
     @OneToMany(mappedBy = "organizer")
-    private Set<Event> events;
+    private List<Event> events = new ArrayList<>();
     @ManyToMany(mappedBy = "participants")
     private List<Event> myEvents = new ArrayList<>();
 }
