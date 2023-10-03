@@ -1,14 +1,12 @@
 package com.sportevents.event;
 
 import com.google.firebase.database.annotations.NotNull;
-import com.sportevents.common.Location;
-import com.sportevents.user.User;
+import com.sportevents.common.EventType;
+import com.sportevents.location.Location;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,18 +23,11 @@ public class Event {
     private String title;
     @NotNull
     private Date date;
-    @ManyToOne
-    @JoinColumn(name = "location", nullable = false)
-    private Location location;
+    private EventType eventType;
     private String description;
+    private boolean active;
+    private Long organizerId;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "organizer", nullable = false)
-    private User organizer;
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "user_event",
-            joinColumns = {@JoinColumn(name = "eventId")},
-            inverseJoinColumns = {@JoinColumn(name = "userId")}
-    )
-    List<User> participants = new ArrayList<>();
+    private Location location;
+
 }

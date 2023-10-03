@@ -1,57 +1,30 @@
 package com.sportevents.event;
 
-import com.sportevents.common.Location;
-import com.sportevents.user.User;
+import com.google.gson.Gson;
+import com.sportevents.request.EventCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/event")
 public class EventController {
 
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;;
 
-    @Autowired
-    private LocationRepository locationRepository;
 
     @GetMapping
-    public ResponseEntity<Event> getEvent() {
-        Event event = new Event(
-                1L,
-                "Tytul",
-                new Date(),
-                new Location(1L, "Lokalizacja", Float.valueOf(2), Float.valueOf(2), null),
-                "Desc",
-                new User(),
-                null
-
-        );
-        System.out.println(event);
+    public ResponseEntity<Event> getEvent(@RequestParam Long eventId) {
+        Event event = eventService.getEvent(eventId);
         return ResponseEntity.ok().body(event);
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-//        Event event = new Event(
-//                1L,
-//                "Tytul",
-//                new Date(),
-//                new Location(1L, "Lokalizacja", Float.valueOf(2), Float.valueOf(2), null),
-//                "Desc",
-//                new User(),
-//                null
-//
-//        );
-        System.out.println(event);
-        System.out.println(event.getLocation().toString());
-        locationRepository.save(event.getLocation());
-        event.setOrganizer(new User());
-        eventRepository.save(event);
-        return ResponseEntity.ok().body(event);
+    public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
+        Gson defaultGson = new Gson();
+        Event event = eventService.createEvent(eventRequest);
+        return ResponseEntity.ok(defaultGson.toJson(event));
     }
 
 

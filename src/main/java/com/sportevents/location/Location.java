@@ -1,11 +1,7 @@
-package com.sportevents.common;
+package com.sportevents.location;
 
-import com.sportevents.event.Event;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,11 +13,8 @@ import java.util.List;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long locationId;
+    private Long id;
     private String name;
-    private Float lnt;
+    private Float lat;
     private Float lng;
-
-    @OneToMany(mappedBy = "location")
-    private List<Event> events = new ArrayList<>();
 }

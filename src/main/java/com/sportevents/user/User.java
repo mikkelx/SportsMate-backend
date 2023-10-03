@@ -23,8 +23,12 @@ public class User {
     private Long userId;
     private String username;
     private String email;
-    @OneToMany(mappedBy = "organizer")
-    private List<Event> events = new ArrayList<>();
-    @ManyToMany(mappedBy = "participants")
-    private List<Event> myEvents = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "users_events",
+            joinColumns = {@JoinColumn(name = "userId")},
+            inverseJoinColumns = {@JoinColumn(name = "eventId")}
+    )
+    private List<Event> joinedEvents = new ArrayList<>();
 }
