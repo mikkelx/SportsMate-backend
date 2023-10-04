@@ -1,4 +1,4 @@
-package com.sportevents.Config;
+package com.sportevents.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
 
     @Bean
-    public ModelMapper modelMapper()
-    {
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 }

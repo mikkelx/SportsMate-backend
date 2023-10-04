@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### FIREBASE ###
+sportevents-firebase-adminsdk-connection-string.json
+src/main/resources/sportevents-firebase-adminsdk-connection-string.json
+/src/main/resources/sportevents-firebase-adminsdk-connection-string.json
