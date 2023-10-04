@@ -1,56 +1,81 @@
 package com.sportevents.event;
 
+import com.sportevents.auth.AuthService;
+import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
+import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
-import com.sportevents.user.User;
-import com.sportevents.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EventService {
 
-    @Autowired
+    private static final double r2d = 180.0D / 3.141592653589793D;
+    private static final double d2r = 3.141592653589793D / 180.0D;
+    private static final double d2km = 111189.57696D * r2d;
+
     private LocationRepository locationRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private EventRepository eventRepository;
 
-    @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    public EventService(LocationRepository locationRepository, EventRepository eventRepository, ModelMapper modelMapper) {
+        this.locationRepository = locationRepository;
+        this.eventRepository = eventRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Event createEvent(EventCreateRequest eventRequest) {
         Location location = eventRequest.getLocation();
-        User user = new User();  //get User from Auth
         Event event = convertEventRequestToEntity(eventRequest);
 
-        event.setOrganizerId(userRepository.save(user).getUserId());
+        event.setOrganizerId(AuthService.getCurrentUserId());
+        event.setActive(true);
 
         locationRepository.save(location);
-         //user exists already in db
-        eventRepository.save(event);
-        return event;
+        return eventRepository.save(event);
     }
 
     public Event getEvent(Long eventId) {
-        return eventRepository.findById(eventId).orElseThrow();
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id " + eventId + " not found"));
     }
-
-
 
     private Event convertEventRequestToEntity(EventCreateRequest eventCreateRequest) {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
-        Event event = modelMapper.map(eventCreateRequest,Event.class);
-        return event;
+        return modelMapper.map(eventCreateRequest,Event.class);
     }
 
 
+    public List<Event> getEventsByRange(Location myLocation, Float range) {
+        List<Event> eventsList = eventRepository.findAllByActive(true);
 
+        List<Event> nearbyEvents = eventsList.stream()
+                .filter(event -> meters(myLocation, event.getLocation()) <= range)
+                .collect(Collectors.toList());
+
+        return nearbyEvents;
+    }
+
+    public double meters(Location myLocation, Location objectLocation) {
+        double lt1 = myLocation.getLat();
+        double ln1 = myLocation.getLng();
+        double lt2 = objectLocation.getLat();
+        double ln2 = objectLocation.getLng();
+
+        double x = lt1 * d2r;
+        double y = lt2 * d2r;
+        double distance = Math.acos( Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos(d2r * (ln1 - ln2))) * d2km;
+        distance = distance / 1000;
+        return distance;
+    }
 }

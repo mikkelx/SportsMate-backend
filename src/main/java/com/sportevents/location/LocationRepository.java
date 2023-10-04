@@ -1,6 +1,5 @@
-package com.sportevents.event;
+package com.sportevents.location;
 
-import com.sportevents.location.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
