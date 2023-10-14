@@ -3,6 +3,7 @@ package com.sportevents.event;
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.common.EventType;
 import com.sportevents.location.Location;
+import com.sportevents.sport.Sport;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,10 +24,11 @@ public class Event {
     private String title;
     @NotNull
     private Date date;
-    private EventType eventType;
     private String description;
     private boolean active;
     private Long organizerId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Sport sport;
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
 
