@@ -7,6 +7,7 @@ import com.sportevents.sport.subclasses.Football;
 import com.sportevents.sport.subclasses.Running;
 import com.sportevents.sport.Sport;
 import com.sportevents.sport.SportRepository;
+import com.sportevents.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,14 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
 
+    @PostMapping("/join")
+    public ResponseEntity<?> joinEventById(Long eventId) {
+        return eventService.joinEvent(eventId);
+    }
 
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getEventsByRange(@RequestParam Long eventId) {
+        return ResponseEntity.ok(eventService.getEventUsers(eventId));
+    }
 
 }

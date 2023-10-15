@@ -11,6 +11,7 @@ import com.sportevents.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,7 +83,29 @@ public class EventService {
         return nearbyEvents;
     }
 
-    public double meters(Location myLocation, Location objectLocation) {
+    public ResponseEntity<?> joinEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id: " + eventId + " not found"));
+
+        if(!event.isActive()) {
+            return ResponseEntity.badRequest().body("Cannot join inactive event!");
+        }
+
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
+
+        user.joinEvent(event);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body("");
+    }
+
+    public List<User> getEventUsers(Long eventId) {
+        List<User> eventUsers = userRepository.findUsersByJoinedEvents_eventId(eventId);
+        return eventUsers;
+    }
+
+    private double meters(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();
         double ln1 = myLocation.getLng();
         double lt2 = objectLocation.getLat();
@@ -94,4 +117,6 @@ public class EventService {
         distance = distance / 1000;
         return distance;
     }
+
+
 }
