@@ -1,5 +1,6 @@
 package com.sportevents.event;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.common.EventType;
 import com.sportevents.location.Location;

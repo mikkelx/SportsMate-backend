@@ -42,9 +42,8 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
-        Gson defaultGson = new Gson();
         Event event = eventService.createEvent(eventRequest);
-        return ResponseEntity.ok(defaultGson.toJson(event));
+        return ResponseEntity.ok(event);
     }
 
     @GetMapping("/nearby")

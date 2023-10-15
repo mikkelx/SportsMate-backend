@@ -13,9 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Football extends Sport {
+public class Cycling extends Sport {
     @Transient
-    private final String sportName = "Piłka nożna";
-    private int durationInMinutes;
+    private final String sportName = "Jazda na rowerze";
+    private double distanceInKm;
 
 }
