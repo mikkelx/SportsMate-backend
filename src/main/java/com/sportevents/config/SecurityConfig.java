@@ -28,8 +28,8 @@ public class SecurityConfig {
 //                .cors()
 //                .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/api/**").permitAll()
-//                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(firebaseTokenProvider));

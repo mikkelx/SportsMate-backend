@@ -6,6 +6,8 @@ import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.sport.SportRepository;
+import com.sportevents.user.User;
+import com.sportevents.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +29,34 @@ public class EventService {
 
     private SportRepository sportRepository;
 
+    private UserRepository userRepository;
+
     private ModelMapper modelMapper;
 
     @Autowired
     public EventService(LocationRepository locationRepository, EventRepository eventRepository, ModelMapper modelMapper,
-                        SportRepository sportRepository) {
+                        SportRepository sportRepository, UserRepository userRepository) {
         this.locationRepository = locationRepository;
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.sportRepository = sportRepository;
+        this.userRepository = userRepository;
     }
 
     public Event createEvent(EventCreateRequest eventRequest) {
-        Location location = eventRequest.getLocation();
         Event event = convertEventRequestToEntity(eventRequest);
 
         event.setOrganizerId(AuthService.getCurrentUserId());
         event.setActive(true);
 
-
-        locationRepository.save(location);
+        locationRepository.save(event.getLocation());
         sportRepository.save(event.getSport());
+
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.joinEvent(event);
+
         return eventRepository.save(event);
     }
 

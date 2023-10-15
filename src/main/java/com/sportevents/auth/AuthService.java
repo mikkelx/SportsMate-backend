@@ -30,10 +30,8 @@ public class AuthService {
     }
 
     public static Long getCurrentUserId() {
-        //TODO - uncomment when start using JWT tokens
-//        Long uid = Long.parseLong((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        return uid;
-        return 1L;
+        Long uid = Long.parseLong((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return uid;
     }
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
@@ -67,6 +65,7 @@ public class AuthService {
 
         try{
             UserRecord createdUser = firebaseAuth.createUser(request);
+            this.setUserRole(createdUser.getUid(), "USER");
             return ResponseEntity.status(201).body("User created with id: " + createdUser.getUid());
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);

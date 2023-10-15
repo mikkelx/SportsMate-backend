@@ -31,4 +31,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "eventId")}
     )
     private List<Event> joinedEvents = new ArrayList<>();
+
+    public void joinEvent(Event event) {
+        this.joinedEvents.add(event);
+    }
 }
