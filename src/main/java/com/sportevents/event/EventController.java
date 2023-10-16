@@ -73,8 +73,7 @@ public class EventController {
 
     @PostMapping("/start")
     public ResponseEntity<?> startEventById(Long eventId) {
-        eventService.startEvent(eventId);
-        return ResponseEntity.ok().body("");
+        return eventService.startEvent(eventId);
     }
 
 }

@@ -97,6 +97,10 @@ public class EventService {
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 
+        if(userRepository.existsUserByJoinedEvents_eventID(eventId)) {
+            return ResponseEntity.badRequest().body("Cannot join same event twice");
+        }
+
         user.joinEvent(event);
         userRepository.save(user);
 
@@ -108,11 +112,17 @@ public class EventService {
         return eventUsers;
     }
 
-    public void startEvent(Long eventId) {
+    public ResponseEntity<String> startEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id: " + eventId  + " not found"));
+
+        if(AuthService.getCurrentUserId() != event.getOrganizerId()) {
+            return ResponseEntity.badRequest().body("Cannot join inactive event!");
+        }
+
         eventRepository.save(event);
         event.setActive(false);
+        return ResponseEntity.ok().body("");
     }
 
     public List<Event> getEventsBySport(Sport sport) {

@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
         List<User> findUsersByJoinedEvents_eventId(Long eventId);
+        boolean existsUserByJoinedEvents_eventID(Long eventId);
 }
