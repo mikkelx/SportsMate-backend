@@ -18,11 +18,15 @@ import java.util.List;
 @RequestMapping("/api/event")
 public class EventController {
 
-    @Autowired
     private EventService eventService;
 
-    @Autowired
     private SportRepository sportRepository;
+
+    @Autowired
+    public EventController(EventService eventService, SportRepository sportRepository) {
+        this.eventService = eventService;
+        this.sportRepository = sportRepository;
+    }
 
     @GetMapping
     public ResponseEntity<Event> getEvent(@RequestParam Long eventId) {
@@ -55,6 +59,7 @@ public class EventController {
     @GetMapping("/bySport")
     public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Sport sport) {
         return ResponseEntity.ok(eventService.getEventsBySport(sport));
+
     }
 
     @PostMapping("/join")
