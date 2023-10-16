@@ -1,7 +1,5 @@
 package com.sportevents.event;
 
-import com.sportevents.sport.Sport;
-import com.sportevents.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,12 +1,11 @@
 package com.sportevents.event;
 
-import com.google.gson.Gson;
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
-import com.sportevents.sport.subclasses.Football;
-import com.sportevents.sport.subclasses.Running;
 import com.sportevents.sport.Sport;
 import com.sportevents.sport.SportRepository;
+import com.sportevents.sport.subclasses.Football;
+import com.sportevents.sport.subclasses.Running;
 import com.sportevents.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

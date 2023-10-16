@@ -1,6 +1,5 @@
 package com.sportevents.request;
 
-import com.sportevents.common.EventType;
 import com.sportevents.location.Location;
 import com.sportevents.sport.Sport;
 import lombok.AllArgsConstructor;

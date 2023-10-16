@@ -2,7 +2,6 @@ package com.sportevents.sport.subclasses;
 
 import com.sportevents.sport.Sport;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
