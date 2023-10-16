@@ -5,19 +5,23 @@ import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
+import com.sportevents.sport.Sport;
 import com.sportevents.sport.SportRepository;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class EventService {
 
     private static final double r2d = 180.0D / 3.141592653589793D;
@@ -105,6 +109,17 @@ public class EventService {
         return eventUsers;
     }
 
+    public void startEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id: " + eventId  + " not found"));
+        eventRepository.save(event);
+        event.setActive(false);
+    }
+
+    public List<Event> getEventsBySport(Sport sport) {
+        return eventRepository.findAllEventsBySport(sport.getClass());
+    }
+
     private double meters(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();
         double ln1 = myLocation.getLng();
@@ -117,6 +132,5 @@ public class EventService {
         distance = distance / 1000;
         return distance;
     }
-
 
 }

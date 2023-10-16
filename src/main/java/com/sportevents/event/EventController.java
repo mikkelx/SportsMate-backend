@@ -52,6 +52,11 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
 
+    @GetMapping("/bySport")
+    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Sport sport) {
+        return ResponseEntity.ok(eventService.getEventsBySport(sport));
+    }
+
     @PostMapping("/join")
     public ResponseEntity<?> joinEventById(Long eventId) {
         return eventService.joinEvent(eventId);
@@ -60,6 +65,12 @@ public class EventController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getEventsByRange(@RequestParam Long eventId) {
         return ResponseEntity.ok(eventService.getEventUsers(eventId));
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity<?> startEventById(Long eventId) {
+        eventService.startEvent(eventId);
+        return ResponseEntity.ok().body("");
     }
 
 }
