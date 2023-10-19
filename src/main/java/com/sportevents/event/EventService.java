@@ -97,7 +97,7 @@ public class EventService {
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 
-        if(userRepository.existsUserByJoinedEvents_eventID(eventId)) {
+        if(userRepository.existsUserByJoinedEvents_eventId(eventId)) {
             return ResponseEntity.badRequest().body("Cannot join same event twice");
         }
 
