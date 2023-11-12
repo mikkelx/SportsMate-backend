@@ -2,11 +2,12 @@ package com.sportevents.event;
 
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.location.Location;
-import com.sportevents.sport.Sport;
+import com.sportevents.sport.subclasses.SportAttribute;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,9 +27,18 @@ public class Event {
     private String description;
     private boolean active;
     private Long organizerId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Sport sport;
+    private String sportName;
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "event_attributes",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "attribute_id"))
+    private List<SportAttribute> attributes;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
+
+    public void addAttribute(String name, String value) {
+        this.attributes.add(new SportAttribute(name, value));
+    }
 
 }

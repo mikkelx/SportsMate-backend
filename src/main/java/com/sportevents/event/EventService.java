@@ -5,8 +5,6 @@ import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
-import com.sportevents.sport.Sport;
-import com.sportevents.sport.SportRepository;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,25 +25,14 @@ public class EventService {
     private static final double d2r = 3.141592653589793D / 180.0D;
     private static final double d2km = 111189.57696D * r2d;
 
-    private LocationRepository locationRepository;
-
-    private EventRepository eventRepository;
-
-    private SportRepository sportRepository;
-
-    private UserRepository userRepository;
-
-    private ModelMapper modelMapper;
-
     @Autowired
-    public EventService(LocationRepository locationRepository, EventRepository eventRepository, ModelMapper modelMapper,
-                        SportRepository sportRepository, UserRepository userRepository) {
-        this.locationRepository = locationRepository;
-        this.eventRepository = eventRepository;
-        this.modelMapper = modelMapper;
-        this.sportRepository = sportRepository;
-        this.userRepository = userRepository;
-    }
+    private LocationRepository locationRepository;
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Event createEvent(EventCreateRequest eventRequest) {
         Event event = convertEventRequestToEntity(eventRequest);
@@ -54,7 +41,6 @@ public class EventService {
         event.setActive(true);
 
         locationRepository.save(event.getLocation());
-        sportRepository.save(event.getSport());
 
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -125,9 +111,9 @@ public class EventService {
         return ResponseEntity.ok().body("");
     }
 
-    public List<Event> getEventsBySport(Sport sport) {
-        return eventRepository.findAllEventsBySport(sport.getClass());
-    }
+//    public List<Event> getEventsBySport(Sport sport) {
+//        return eventRepository.findAllEventsBySport(sport.getClass());
+//    }
 
     private double meters(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();

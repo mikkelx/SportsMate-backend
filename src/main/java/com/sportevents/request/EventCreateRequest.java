@@ -1,13 +1,14 @@
 package com.sportevents.request;
 
 import com.sportevents.location.Location;
-import com.sportevents.sport.Sport;
+import com.sportevents.sport.subclasses.SportAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class EventCreateRequest {
     private Date date;
     private Location location;
     private String description;
-    private Sport sport;
+    private String sportName;
+    private List<SportAttribute> attributes;
 }
 

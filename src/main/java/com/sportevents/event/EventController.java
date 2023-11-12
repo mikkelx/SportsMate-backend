@@ -2,10 +2,6 @@ package com.sportevents.event;
 
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
-import com.sportevents.sport.Sport;
-import com.sportevents.sport.SportRepository;
-import com.sportevents.sport.subclasses.Football;
-import com.sportevents.sport.subclasses.Running;
 import com.sportevents.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +15,13 @@ public class EventController {
 
     private EventService eventService;
 
-    private SportRepository sportRepository;
+
+    private EventRepository eventRepository;
 
     @Autowired
-    public EventController(EventService eventService, SportRepository sportRepository) {
+    public EventController(EventService eventService, EventRepository eventRepository) {
         this.eventService = eventService;
-        this.sportRepository = sportRepository;
+        this.eventRepository = eventRepository;
     }
 
     @GetMapping
@@ -33,16 +30,15 @@ public class EventController {
         return ResponseEntity.ok().body(event);
     }
 
-    @GetMapping("/x")
-    public ResponseEntity<Event> getEvent2(@RequestParam Long eventId) {
-        Event event = new Event();
-        Sport sport = new Football(10);
-        Sport sport2 = new Running(10.0);
-        event.setSport(sport);
-        sportRepository.save(sport);
-        sportRepository.save(sport2);
-        return ResponseEntity.ok().body(event);
-    }
+//    @GetMapping("/x")
+//    public ResponseEntity<Event> getEvent2(@RequestParam String sportName) {
+//        Event event = new Event();
+//        Sport sport = sportRepository.findBySportName(sportName);
+//        sport.addAttribute("Długość gry", "60");
+//        event.setSport(sport);
+//        eventRepository.save(event);
+//        return ResponseEntity.ok().body(event);
+//    }
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
@@ -55,11 +51,11 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
 
-    @GetMapping("/bySport")
-    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Sport sport) {
-        return ResponseEntity.ok(eventService.getEventsBySport(sport));
-
-    }
+//    @GetMapping("/bySport")
+//    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Sport sport) {
+//        return ResponseEntity.ok(eventService.getEventsBySport(sport));
+//
+//    }
 
     @PostMapping("/join")
     public ResponseEntity<?> joinEventById(Long eventId) {
