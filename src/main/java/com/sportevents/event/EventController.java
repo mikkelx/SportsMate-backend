@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/event")
 public class EventController {
@@ -46,7 +47,7 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/nearby")
+    @PostMapping("/nearby")
     public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
