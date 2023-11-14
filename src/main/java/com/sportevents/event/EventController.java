@@ -33,6 +33,10 @@ public class EventController {
         return ResponseEntity.ok(eventService.getActiveEventsBySport(message.getMessage()));
     }
 
+//    @GetMapping("/history")
+//    public ResponseEntity<List<Event>> getHistoryEvents() {
+//        return ResponseEntity.ok(eventService.getHistoryEvents());
+//    }
 
 //    @GetMapping("/x")
 //    public ResponseEntity<Event> getEvent2(@RequestParam String sportName) {

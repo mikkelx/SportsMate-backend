@@ -83,8 +83,9 @@ public class AuthService {
 
     private boolean checkIfUserExists(String email) {
         try {
-            if(firebaseAuth.getUserByEmail(email) != null)
+            if(firebaseAuth.getUserByEmail(email) != null) {
                 return true;
+            }
         } catch (FirebaseAuthException e) {
             return false;
         }

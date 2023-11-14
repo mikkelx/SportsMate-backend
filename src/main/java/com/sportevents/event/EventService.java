@@ -7,6 +7,7 @@ import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
+import jakarta.servlet.ServletOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -84,7 +85,9 @@ public class EventService {
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 
-        if(userRepository.existsUserByJoinedEvents_eventId(eventId)) {
+        System.out.println(userRepository.existsByUserIdAndEventId(user.getUserId(), eventId));
+        System.out.println(userRepository.findUsersByJoinedEvents_eventId(eventId).get(0));
+        if(userRepository.existsByUserIdAndEventId(user.getUserId(), eventId)) {
             return ResponseEntity.badRequest().body("Cannot join same event twice");
         }
 
@@ -130,4 +133,8 @@ public class EventService {
     public List<Event> getActiveEventsBySport(String sportName) {
         return eventRepository.findAllBySportNameAndActive(sportName, true);
     }
+
+//    public List<Event> getHistoryEvents() {
+//        return userRepository.findJoinedEventsByUserId(AuthService.getCurrentUserId());
+//    }
 }
