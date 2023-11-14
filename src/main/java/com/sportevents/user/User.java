@@ -1,6 +1,8 @@
 package com.sportevents.user;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sportevents.event.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,7 @@ public class User {
     private String username;
     private String email;
 
+    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "users_events",
