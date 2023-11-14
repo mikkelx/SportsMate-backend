@@ -39,6 +39,7 @@ public class EventService {
 
         event.setOrganizerId(AuthService.getCurrentUserId());
         event.setActive(true);
+        event.increaseParticipantsNumber();
 
         locationRepository.save(event.getLocation());
 
@@ -87,6 +88,8 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot join same event twice");
         }
 
+        event.increaseParticipantsNumber();
+
         user.joinEvent(event);
         userRepository.save(user);
 
@@ -103,17 +106,13 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id: " + eventId  + " not found"));
 
         if(AuthService.getCurrentUserId() != event.getOrganizerId()) {
-            return ResponseEntity.badRequest().body("Cannot join inactive event!");
+            return ResponseEntity.badRequest().body("Cannot start somebody's event!");
         }
 
         eventRepository.save(event);
         event.setActive(false);
         return ResponseEntity.ok().body("");
     }
-
-//    public List<Event> getEventsBySport(Sport sport) {
-//        return eventRepository.findAllEventsBySport(sport.getClass());
-//    }
 
     private double meters(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();
@@ -128,4 +127,7 @@ public class EventService {
         return distance;
     }
 
+    public List<Event> getActiveEventsBySport(String sportName) {
+        return eventRepository.findAllBySportNameAndActive(sportName, true);
+    }
 }

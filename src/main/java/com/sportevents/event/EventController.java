@@ -1,5 +1,6 @@
 package com.sportevents.event;
 
+import com.sportevents.dto.Message;
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.user.User;
@@ -16,13 +17,9 @@ public class EventController {
 
     private EventService eventService;
 
-
-    private EventRepository eventRepository;
-
     @Autowired
-    public EventController(EventService eventService, EventRepository eventRepository) {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
-        this.eventRepository = eventRepository;
     }
 
     @GetMapping
@@ -30,6 +27,12 @@ public class EventController {
         Event event = eventService.getEvent(eventId);
         return ResponseEntity.ok().body(event);
     }
+
+    @PostMapping("/bySport")
+    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Message message) {
+        return ResponseEntity.ok(eventService.getActiveEventsBySport(message.getMessage()));
+    }
+
 
 //    @GetMapping("/x")
 //    public ResponseEntity<Event> getEvent2(@RequestParam String sportName) {
@@ -51,12 +54,6 @@ public class EventController {
     public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
-
-//    @GetMapping("/bySport")
-//    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Sport sport) {
-//        return ResponseEntity.ok(eventService.getEventsBySport(sport));
-//
-//    }
 
     @PostMapping("/join")
     public ResponseEntity<?> joinEventById(Long eventId) {

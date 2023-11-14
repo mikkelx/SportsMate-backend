@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByActive(boolean active);
-
+    List<Event> findAllBySportName(String sportName);
+    List<Event> findAllBySportNameAndActive(String sportName, boolean active);
 //    @Query("SELECT a FROM Event a WHERE TYPE(a.sport) = :dtype")
 //    List<Event> findAllEventsBySport(@Param("dtype") Class<?> dtype);
 

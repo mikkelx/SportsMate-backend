@@ -28,6 +28,9 @@ public class Event {
     private boolean active;
     private Long organizerId;
     private String sportName;
+    @Transient
+    private int participantsNumber;
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "event_attributes",
             joinColumns = @JoinColumn(name = "event_id"),
@@ -39,6 +42,10 @@ public class Event {
 
     public void addAttribute(String name, String value) {
         this.attributes.add(new SportAttribute(name, value));
+    }
+
+    public void increaseParticipantsNumber() {
+        this.participantsNumber++;
     }
 
 }
