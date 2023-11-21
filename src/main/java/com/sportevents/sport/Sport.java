@@ -29,4 +29,8 @@ public class Sport {
     public Sport(String sportName) {
         this.sportName = sportName;
     }
+
+    public void addAttribute(String attribute) {
+        this.attributes.add(attribute);
+    }
 }

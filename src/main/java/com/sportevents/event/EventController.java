@@ -3,6 +3,7 @@ package com.sportevents.event;
 import com.sportevents.dto.Message;
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
+import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,11 @@ public class EventController {
     @GetMapping("/x")
     public ResponseEntity<Event> getEvent2() {
         Event event = new Event();
+        Sport sport = new Sport("Piłka nożna");
+        sport.addAttribute("Czas gry");
+        event.setLocation(new Location());
+        event.setSport(sport);
+        event.addValue("Czas gry", "2h");
         return ResponseEntity.ok().body(event);
     }
 

@@ -30,9 +30,6 @@ public class Event {
     private Long organizerId;
     private int participantsNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Sport sport;
-
     @ElementCollection
     @MapKeyColumn(name="name")
     @Column(name="value")
@@ -42,12 +39,19 @@ public class Event {
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Sport sport;
+
     @JsonBackReference
     @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
 
     public void increaseParticipantsNumber() {
         this.participantsNumber++;
+    }
+
+    public void addValue(String key, String value) {
+        this.values.put(key, value);
     }
 
 }
