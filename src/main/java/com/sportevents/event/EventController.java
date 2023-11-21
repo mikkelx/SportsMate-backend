@@ -28,25 +28,16 @@ public class EventController {
         return ResponseEntity.ok().body(event);
     }
 
-    @PostMapping("/bySport")
-    public ResponseEntity<List<Event>> getEventsBySport(@RequestBody Message message) {
-        return ResponseEntity.ok(eventService.getActiveEventsBySport(message.getMessage()));
-    }
-
 //    @GetMapping("/history")
 //    public ResponseEntity<List<Event>> getHistoryEvents() {
 //        return ResponseEntity.ok(eventService.getHistoryEvents());
 //    }
 
-//    @GetMapping("/x")
-//    public ResponseEntity<Event> getEvent2(@RequestParam String sportName) {
-//        Event event = new Event();
-//        Sport sport = sportRepository.findBySportName(sportName);
-//        sport.addAttribute("Długość gry", "60");
-//        event.setSport(sport);
-//        eventRepository.save(event);
-//        return ResponseEntity.ok().body(event);
-//    }
+    @GetMapping("/x")
+    public ResponseEntity<Event> getEvent2() {
+        Event event = new Event();
+        return ResponseEntity.ok().body(event);
+    }
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {

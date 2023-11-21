@@ -8,9 +8,7 @@ import com.sportevents.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,14 +28,16 @@ public class Event {
     private String description;
     private boolean active;
     private Long organizerId;
-    private String sportName;
     private int participantsNumber;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "event_sport",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "sport_id"))
-    private List<Sport> sport;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Sport sport;
+
+    @ElementCollection
+    @MapKeyColumn(name="name")
+    @Column(name="value")
+    @CollectionTable(name="event_values", joinColumns=@JoinColumn(name="eventId"))
+    private Map<String, String> values = new HashMap<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;

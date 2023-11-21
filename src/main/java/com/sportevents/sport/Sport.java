@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,12 +21,10 @@ public class Sport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     private String sportName;
-    
+
     @ElementCollection
-    @MapKeyColumn(name="key")
-    @Column(name="value")
-    @CollectionTable(name="sport_values", joinColumns=@JoinColumn(name="sport_id"))
-    private Map<String, String> value = new HashMap<>();
+    @CollectionTable(name="sport_attributes", joinColumns=@JoinColumn(name="sportId"))
+    private Set<String> attributes = new HashSet<>();
 
     public Sport(String sportName) {
         this.sportName = sportName;

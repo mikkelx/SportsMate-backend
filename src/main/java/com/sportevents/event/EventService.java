@@ -130,9 +130,6 @@ public class EventService {
         return distance;
     }
 
-    public List<Event> getActiveEventsBySport(String sportName) {
-        return eventRepository.findAllBySportNameAndActive(sportName, true);
-    }
 
 //    public List<Event> getHistoryEvents() {
 //        return userRepository.findJoinedEventsByUserId(AuthService.getCurrentUserId());
