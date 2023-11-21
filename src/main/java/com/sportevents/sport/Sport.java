@@ -1,5 +1,6 @@
 package com.sportevents.sport;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +17,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) //jackson does not know how to serailze lazy loaded fields
 public class Sport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    protected Long sportId;
     private String sportName;
 
     @ElementCollection

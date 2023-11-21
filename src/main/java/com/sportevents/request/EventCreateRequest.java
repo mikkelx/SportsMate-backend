@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,9 +18,10 @@ import java.util.List;
 public class EventCreateRequest {
     private String title;
     private Date date;
-    private Location location;
     private String description;
+    private Location location;
     private String sportName;
-    private List<Sport> attributes;
+    private Sport sport;
+    private Map<String, String> values;
 }
 
