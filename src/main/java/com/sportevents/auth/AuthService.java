@@ -70,6 +70,7 @@ public class AuthService {
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);
             log.warn("Error registering user with email: " + registerRequest.getEmail());
+            log.warn(e.toString());
             return ResponseEntity.internalServerError().body("User with email" + registerRequest.getEmail() + " not registered");
         }
     }

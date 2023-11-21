@@ -6,7 +6,6 @@ public enum SportType {
     TENNIS("Tenis"),
     SWIMMING("Pływanie"),
     VOLLEYBALL("Siatkówka"),
-    GOLF("Golf"),
     ATHLETICS("Lekkoatletyka"),
     TABLE_TENNIS("Tenis stołowy"),
     CYCLING("Kolarstwo"),
@@ -15,7 +14,8 @@ public enum SportType {
     RUNNING("Bieganie"),
     MARATHON("Maraton"),
     SPRINT("Sprinterka"),
-    LONG_DISTANCE("Biegi długodystansowe");
+    LONG_DISTANCE("Biegi długodystansowe"),
+    OTHER("Inny");
 
     private final String polishName;
 
