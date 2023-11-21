@@ -1,10 +1,9 @@
 package com.sportevents.event;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.location.Location;
-import com.sportevents.sport.subclasses.SportAttribute;
+import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,10 +34,10 @@ public class Event {
     private int participantsNumber;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "event_attributes",
+    @JoinTable(name = "event_sport",
             joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "attribute_id"))
-    private List<SportAttribute> attributes;
+            inverseJoinColumns = @JoinColumn(name = "sport_id"))
+    private List<Sport> sport;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
@@ -46,10 +45,6 @@ public class Event {
     @JsonBackReference
     @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
-
-    public void addAttribute(String name, String value) {
-        this.attributes.add(new SportAttribute(name, value));
-    }
 
     public void increaseParticipantsNumber() {
         this.participantsNumber++;

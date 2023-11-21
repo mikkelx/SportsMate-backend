@@ -1,7 +1,7 @@
 package com.sportevents.request;
 
 import com.sportevents.location.Location;
-import com.sportevents.sport.subclasses.SportAttribute;
+import com.sportevents.sport.Sport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +20,6 @@ public class EventCreateRequest {
     private Location location;
     private String description;
     private String sportName;
-    private List<SportAttribute> attributes;
+    private List<Sport> attributes;
 }
 
