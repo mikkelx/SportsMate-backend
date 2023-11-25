@@ -1,5 +1,6 @@
 package com.sportevents.comment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.event.Event;
 import com.sportevents.user.User;
@@ -18,14 +19,16 @@ import lombok.Setter;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long commentId;
 
     private String content;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User author;

@@ -27,8 +27,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getCommentsByEvent(@PathVariable Long eventId) {
-        List<Comment> comments = commentService.getCommentsByEvent(eventId);
+    public ResponseEntity<List<CommentDto>> getCommentsByEvent(@PathVariable Long eventId) {
+        List<CommentDto> comments = commentService.getCommentsByEvent(eventId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 

@@ -31,7 +31,7 @@ public class CommentService {
     @Transactional
     public void addComment(Long eventId, CommentDto commentDto) {
         Comment comment = new Comment();
-        comment.setContent(comment.getContent());
+        comment.setContent(commentDto.getContent());
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event not found"));
@@ -43,8 +43,18 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByEvent(Long eventId) {
-        return commentRepository.findByEvent_EventId(eventId);
+    public List<CommentDto> getCommentsByEvent(Long eventId) {
+        List<CommentDto> comments = commentRepository.findByEvent_EventId(eventId).stream()
+                .map(comment -> {
+                    CommentDto commentDto = new CommentDto();
+                    commentDto.setCommentId(comment.getCommentId());
+                    commentDto.setContent(comment.getContent());
+                    commentDto.setAuthorUsername(comment.getAuthor().getUsername());
+                    commentDto.setEventId(eventId);
+                    return commentDto;
+                })
+                .toList();
+        return comments;
     }
 
     @Transactional
