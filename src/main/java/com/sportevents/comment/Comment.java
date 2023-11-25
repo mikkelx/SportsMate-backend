@@ -1,0 +1,39 @@
+package com.sportevents.comment;
+
+import com.google.firebase.database.annotations.NotNull;
+import com.sportevents.event.Event;
+import com.sportevents.user.User;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "comments")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    public Comment(String content, Event event, User author) {
+        this.content = content;
+        this.event = event;
+        this.author = author;
+    }
+}
+

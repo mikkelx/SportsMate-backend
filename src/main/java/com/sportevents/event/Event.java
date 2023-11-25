@@ -2,6 +2,7 @@ package com.sportevents.event;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.firebase.database.annotations.NotNull;
+import com.sportevents.comment.Comment;
 import com.sportevents.location.Location;
 import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
@@ -38,6 +39,10 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Sport sport;
