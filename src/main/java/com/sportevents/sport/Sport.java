@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) //jackson does not know how to serailze lazy loaded fields
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) //jackson does not know how to serailze lazy loaded fields
 public class Sport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

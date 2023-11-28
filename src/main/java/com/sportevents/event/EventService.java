@@ -5,6 +5,7 @@ import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.request.EventCreateRequest;
+import com.sportevents.sport.SportRepository;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import jakarta.servlet.ServletOutputStream;
@@ -32,6 +33,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SportRepository sportRepository;
     @Autowired
     private ModelMapper modelMapper;
 

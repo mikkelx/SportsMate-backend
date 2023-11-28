@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 public class CommentService {
-
     private final CommentRepository commentRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
