@@ -7,6 +7,7 @@ import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,12 +47,14 @@ public class EventController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
         Event event = eventService.createEvent(eventRequest);
         return ResponseEntity.ok(event);
     }
 
     @PostMapping("/nearby")
+    @Transactional
     public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }

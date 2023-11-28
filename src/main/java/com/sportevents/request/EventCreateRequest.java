@@ -20,7 +20,6 @@ public class EventCreateRequest {
     private Date date;
     private String description;
     private Location location;
-    private String sportName;
     private Sport sport;
     private Map<String, String> values;
 }
