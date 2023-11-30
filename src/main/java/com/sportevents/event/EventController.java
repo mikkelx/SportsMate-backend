@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/event")
 public class EventController {
 
-    private EventService eventService;
+    private final EventService eventService;
 
     @Autowired
     public EventController(EventService eventService) {
@@ -35,16 +35,16 @@ public class EventController {
 //        return ResponseEntity.ok(eventService.getHistoryEvents());
 //    }
 
-    @GetMapping("/x")
-    public ResponseEntity<Event> getEvent2() {
-        Event event = new Event();
-        Sport sport = new Sport("Piłka nożna");
-        sport.addAttribute("Czas gry");
-        event.setLocation(new Location());
-        event.setSport(sport);
-        event.addValue("Czas gry", "2h");
-        return ResponseEntity.ok().body(event);
-    }
+//    @GetMapping("/x")
+//    public ResponseEntity<Event> getEvent2() {
+//        Event event = new Event();
+//        Sport sport = new Sport("Piłka nożna");
+//        sport.addAttribute("Czas gry");
+//        event.setLocation(new Location());
+//        event.setSport(sport);
+//        event.addValue("Czas gry", "2h");
+//        return ResponseEntity.ok().body(event);
+//    }
 
     @PostMapping
     @Transactional
