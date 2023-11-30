@@ -43,7 +43,7 @@ public class CommentService {
     }
 
     public List<CommentDto> getCommentsByEvent(Long eventId) {
-        List<CommentDto> comments = commentRepository.findByEvent_EventId(eventId).stream()
+        return commentRepository.findByEvent_EventId(eventId).stream()
                 .map(comment -> {
                     CommentDto commentDto = new CommentDto();
                     commentDto.setCommentId(comment.getCommentId());
@@ -53,7 +53,6 @@ public class CommentService {
                     return commentDto;
                 })
                 .toList();
-        return comments;
     }
 
     @Transactional

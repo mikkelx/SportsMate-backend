@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,16 +28,19 @@ public class EventService {
     private static final double d2r = 3.141592653589793D / 180.0D;
     private static final double d2km = 111189.57696D * r2d;
 
+    private final LocationRepository locationRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
-    private EventRepository eventRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private SportRepository sportRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    public EventService(LocationRepository locationRepository, EventRepository eventRepository,
+                        UserRepository userRepository, ModelMapper modelMapper) {
+        this.locationRepository = locationRepository;
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Event createEvent(EventCreateRequest eventRequest) {
         Event event = convertEventRequestToEntity(eventRequest);
@@ -56,8 +60,15 @@ public class EventService {
     }
 
     public Event getEvent(Long eventId) {
-        return eventRepository.findById(eventId)
+        Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id " + eventId + " not found"));
+        event.setJoined(userRepository.existsByUserIdAndEventId(AuthService.getCurrentUserId(), eventId));
+
+        event.setJoined(event.getUsers()
+                .stream()
+                .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
+
+        return event;
     }
 
     private Event convertEventRequestToEntity(EventCreateRequest eventCreateRequest) {
@@ -70,11 +81,9 @@ public class EventService {
     public List<Event> getEventsByRange(Location myLocation, Float range) {
         List<Event> eventsList = eventRepository.findAllByActive(true);
 
-        List<Event> nearbyEvents = eventsList.stream()
+        return eventsList.stream()
                 .filter(event -> meters(myLocation, event.getLocation()) <= range)
                 .collect(Collectors.toList());
-
-        return nearbyEvents;
     }
 
     public ResponseEntity<?> joinEvent(Long eventId) {
@@ -92,8 +101,6 @@ public class EventService {
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 
-        System.out.println(userRepository.existsByUserIdAndEventId(user.getUserId(), eventId));
-        System.out.println(userRepository.findUsersByJoinedEvents_eventId(eventId).get(0));
         if(userRepository.existsByUserIdAndEventId(user.getUserId(), eventId)) {
             return ResponseEntity.badRequest().body("Cannot join same event twice");
         }
@@ -107,8 +114,7 @@ public class EventService {
     }
 
     public List<User> getEventUsers(Long eventId) {
-        List<User> eventUsers = userRepository.findUsersByJoinedEvents_eventId(eventId);
-        return eventUsers;
+        return userRepository.findUsersByJoinedEvents_eventId(eventId);
     }
 
     public ResponseEntity<String> startEvent(Long eventId) {

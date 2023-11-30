@@ -55,7 +55,7 @@ public class Event {
     private List<User> users = new ArrayList<>();
 
     //only for frontend -- ignore this field when saving to database
-    @JsonIgnoreProperties({"joined"})
+    @Transient
     private boolean joined;
 
     public void increaseParticipantsNumber() {
