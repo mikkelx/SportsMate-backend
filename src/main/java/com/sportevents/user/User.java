@@ -25,6 +25,7 @@ public class User {
     private Long userId;
     private String username;
     private String email;
+    private boolean isLocked;
 
     @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.ALL})

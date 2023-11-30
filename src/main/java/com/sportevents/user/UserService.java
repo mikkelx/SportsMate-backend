@@ -19,5 +19,12 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
     }
 
+    public User blockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+        user.setLocked(true);
+        return userRepository.save(user);
+    }
 
+    
 }

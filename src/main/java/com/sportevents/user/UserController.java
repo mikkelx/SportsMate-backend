@@ -3,10 +3,7 @@ package com.sportevents.user;
 import com.sportevents.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,6 +20,12 @@ public class UserController {
     public ResponseEntity<User> getUser(@RequestParam Long userId) {
         User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/block")
+    public ResponseEntity<?> blockUser(@RequestParam Long userId) {
+        User user = userService.blockUser(userId);
+        return ResponseEntity.ok().body(user);
     }
 
 }
