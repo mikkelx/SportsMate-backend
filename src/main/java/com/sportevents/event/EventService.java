@@ -85,6 +85,10 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot join inactive event!");
         }
 
+        if(event.getParticipantsNumber() >= event.getMaxParticipantsNumber()) {
+            return ResponseEntity.badRequest().body("Event is full!");
+        }
+
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 

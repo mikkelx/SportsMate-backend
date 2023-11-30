@@ -19,6 +19,7 @@ public class EventCreateRequest {
     private String title;
     private Date date;
     private String description;
+    private int maxParticipantsNumber;
     private Location location;
     private Sport sport;
     private Map<String, String> values;

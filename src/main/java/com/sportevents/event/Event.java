@@ -1,6 +1,7 @@
 package com.sportevents.event;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.firebase.database.annotations.NotNull;
 import com.sportevents.comment.Comment;
@@ -30,6 +31,7 @@ public class Event {
     private String description;
     private boolean active;
     private Long organizerId;
+    private int maxParticipantsNumber;
     private int participantsNumber;
 
     @ElementCollection
@@ -41,9 +43,9 @@ public class Event {
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Sport sport;
@@ -51,6 +53,10 @@ public class Event {
     @JsonBackReference
     @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
+
+    //only for frontend -- ignore this field when saving to database
+    @JsonIgnoreProperties({"joined"})
+    private boolean joined;
 
     public void increaseParticipantsNumber() {
         this.participantsNumber++;

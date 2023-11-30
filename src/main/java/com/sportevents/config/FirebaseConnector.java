@@ -3,13 +3,14 @@ package com.sportevents.config;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Component
+@Configuration
 public class FirebaseConnector {
 
     public FirebaseConnector() throws IOException {
@@ -23,5 +24,4 @@ public class FirebaseConnector {
                 .build();
         FirebaseApp.initializeApp(options);
     }
-
 }
