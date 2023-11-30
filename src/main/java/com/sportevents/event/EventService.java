@@ -82,7 +82,13 @@ public class EventService {
         List<Event> eventsList = eventRepository.findAllByActive(true);
 
         return eventsList.stream()
-                .filter(event -> meters(myLocation, event.getLocation()) <= range)
+                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+                .peek(event -> {
+                    event.setDistance(calculateDistance(myLocation, event.getLocation()));
+//                    event.setJoined(event.getUsers()
+//                            .stream()
+//                            .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -130,7 +136,7 @@ public class EventService {
         return ResponseEntity.ok().body("");
     }
 
-    private double meters(Location myLocation, Location objectLocation) {
+    private double calculateDistance(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();
         double ln1 = myLocation.getLng();
         double lt2 = objectLocation.getLat();

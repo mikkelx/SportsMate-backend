@@ -58,6 +58,9 @@ public class Event {
     @Transient
     private boolean joined;
 
+    @Transient
+    private double distance;
+
     public void increaseParticipantsNumber() {
         this.participantsNumber++;
     }

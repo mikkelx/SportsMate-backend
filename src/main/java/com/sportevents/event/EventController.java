@@ -73,6 +73,4 @@ public class EventController {
     public ResponseEntity<?> startEventById(Long eventId) {
         return eventService.startEvent(eventId);
     }
-
-
 }
