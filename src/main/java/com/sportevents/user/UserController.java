@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<User> getUser(@RequestParam Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+        User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
     }
 

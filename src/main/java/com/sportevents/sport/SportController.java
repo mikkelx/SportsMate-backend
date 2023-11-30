@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("/api/sport")
 public class SportController {
 
-    private SportRepository sportRepository;
+    private final SportRepository sportRepository;
 
     @Autowired
     public SportController(SportRepository sportRepository) {
         this.sportRepository = sportRepository;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createSport(@RequestBody Sport sport) {
         return ResponseEntity.ok().body(sportRepository.save(sport));
     }
@@ -37,6 +37,12 @@ public class SportController {
     @GetMapping("/all")
     public ResponseEntity<List<Sport>> getAllSports() {
         return ResponseEntity.ok().body(sportRepository.findAll());
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteSport(@RequestParam Long sportId) {
+        sportRepository.deleteById(sportId);
+        return ResponseEntity.ok().body("Sport deleted");
     }
 
 }

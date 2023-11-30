@@ -73,4 +73,9 @@ public class EventController {
     public ResponseEntity<?> startEventById(Long eventId) {
         return eventService.startEvent(eventId);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteEventById(Long eventId) {
+        return eventService.deleteEvent(eventId);
+    }
 }

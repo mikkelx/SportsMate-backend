@@ -127,12 +127,24 @@ public class EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id: " + eventId  + " not found"));
 
-        if(AuthService.getCurrentUserId() != event.getOrganizerId()) {
+        if(!AuthService.getCurrentUserId().equals(event.getOrganizerId())) {
             return ResponseEntity.badRequest().body("Cannot start somebody's event!");
         }
 
         eventRepository.save(event);
         event.setActive(false);
+        return ResponseEntity.ok().body("");
+    }
+
+    public ResponseEntity<?> deleteEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id: " + eventId  + " not found"));
+
+        if(!AuthService.getCurrentUserId().equals(event.getOrganizerId())) {
+            return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
+        }
+
+        eventRepository.delete(event);
         return ResponseEntity.ok().body("");
     }
 

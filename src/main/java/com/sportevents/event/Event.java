@@ -57,7 +57,6 @@ public class Event {
     //only for frontend -- ignore this field when saving to database
     @Transient
     private boolean joined;
-
     @Transient
     private double distance;
 
