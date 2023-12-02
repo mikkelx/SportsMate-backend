@@ -35,4 +35,9 @@ public class UserController {
         return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserId().toString()));
     }
 
+    @GetMapping("/role")
+    public ResponseEntity<?> getMyRole() {
+        return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserRole()));
+    }
+
 }

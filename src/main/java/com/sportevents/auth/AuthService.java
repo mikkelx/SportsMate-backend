@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,6 +33,11 @@ public class AuthService {
     public static Long getCurrentUserId() {
         Long uid = Long.parseLong((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return uid;
+    }
+
+    public static String getCurrentUserRole() {
+        String role = (String)SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().collect(Collectors.toList()).get(0).toString();
+        return role;
     }
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
