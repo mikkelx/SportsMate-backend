@@ -28,7 +28,7 @@ public class User {
     private boolean isLocked;
 
     @JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "users_events",
             joinColumns = {@JoinColumn(name = "userId")},
@@ -38,5 +38,9 @@ public class User {
 
     public void joinEvent(Event event) {
         this.joinedEvents.add(event);
+    }
+
+    public void leaveEvent(Event event) {
+        this.joinedEvents.remove(event);
     }
 }

@@ -50,7 +50,7 @@ public class EventService {
 
         event.setOrganizerId(AuthService.getCurrentUserId());
         event.setActive(true);
-        event.increaseParticipantsNumber();
+        event.setParticipantsNumber(1);
 
         locationRepository.save(event.getLocation());
 
@@ -146,6 +146,11 @@ public class EventService {
         if(!AuthService.getCurrentUserId().equals(event.getOrganizerId())) {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
+
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.leaveEvent(event);
 
         commentService.deleteAllCommentsByEventId(eventId);
         eventRepository.delete(event);

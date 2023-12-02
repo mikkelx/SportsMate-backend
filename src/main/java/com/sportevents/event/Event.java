@@ -56,8 +56,7 @@ public class Event {
     private Sport sport;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @ManyToMany(mappedBy = "joinedEvents")
     private List<User> users = new ArrayList<>();
 
     // only for frontend -- ignore this field when saving to database
