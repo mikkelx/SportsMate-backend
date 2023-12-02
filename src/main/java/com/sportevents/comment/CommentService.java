@@ -75,5 +75,11 @@ public class CommentService {
         }
         commentRepository.delete(comment);
     }
+
+    @Transactional
+    public void deleteAllCommentsByEventId(Long eventId) {
+        commentRepository.deleteAllByEvent_EventId(eventId);
+    }
+
 }
 

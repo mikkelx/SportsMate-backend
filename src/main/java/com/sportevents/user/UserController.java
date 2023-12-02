@@ -1,5 +1,7 @@
 package com.sportevents.user;
 
+import com.sportevents.auth.AuthService;
+import com.sportevents.dto.Message;
 import com.sportevents.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,11 @@ public class UserController {
     public ResponseEntity<?> blockUser(@RequestParam Long userId) {
         User user = userService.blockUser(userId);
         return ResponseEntity.ok().body(user);
+    }
+
+    @GetMapping("/id")
+    public ResponseEntity<?> getMyId() {
+        return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserId().toString()));
     }
 
 }

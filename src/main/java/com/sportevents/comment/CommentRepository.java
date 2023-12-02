@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByEvent_EventId(Long eventId);
+    int deleteAllByEvent_EventId(Long eventId);
 }
 

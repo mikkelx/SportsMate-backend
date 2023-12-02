@@ -5,6 +5,7 @@ import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/event")
+@Slf4j
 public class EventController {
 
     private final EventService eventService;
@@ -74,7 +76,7 @@ public class EventController {
         return eventService.startEvent(eventId);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<?> deleteEventById(Long eventId) {
         return eventService.deleteEvent(eventId);
     }

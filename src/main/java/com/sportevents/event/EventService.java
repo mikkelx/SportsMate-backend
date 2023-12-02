@@ -1,6 +1,7 @@
 package com.sportevents.event;
 
 import com.sportevents.auth.AuthService;
+import com.sportevents.comment.CommentService;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
@@ -31,14 +32,16 @@ public class EventService {
     private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final CommentService commentService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public EventService(LocationRepository locationRepository, EventRepository eventRepository,
-                        UserRepository userRepository, ModelMapper modelMapper) {
+                        UserRepository userRepository, CommentService commentService, ModelMapper modelMapper) {
         this.locationRepository = locationRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.commentService = commentService;
         this.modelMapper = modelMapper;
     }
 
@@ -144,7 +147,9 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
 
+        commentService.deleteAllCommentsByEventId(eventId);
         eventRepository.delete(event);
+
         return ResponseEntity.ok().body("");
     }
 

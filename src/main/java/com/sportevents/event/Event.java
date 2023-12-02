@@ -10,6 +10,7 @@ import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.*;
 
@@ -35,26 +36,31 @@ public class Event {
     private int participantsNumber;
 
     @ElementCollection
-    @MapKeyColumn(name="name")
-    @Column(name="value")
-    @CollectionTable(name="event_values", joinColumns=@JoinColumn(name="eventId"))
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
+    @CollectionTable(name = "event_values", joinColumns = @JoinColumn(name = "eventId"))
     private Map<String, String> values = new HashMap<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Comment> comments = new ArrayList<>();
+    // @JsonManagedReference
+    // @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval =
+    // true, fetch = FetchType.LAZY)
+    // private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Sport sport;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "joinedEvents", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<User> users = new ArrayList<>();
 
-    //only for frontend -- ignore this field when saving to database
+    // only for frontend -- ignore this field when saving to database
     @Transient
     private boolean joined;
     @Transient
