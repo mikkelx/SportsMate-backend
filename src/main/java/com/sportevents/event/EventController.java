@@ -61,8 +61,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
 
-    @PostMapping("/join")
-    public ResponseEntity<?> joinEventById(Long eventId) {
+    @GetMapping("/join")
+    public ResponseEntity<?> joinEventById(@RequestParam Long eventId) {
+        log.info("Joining event with id: " + eventId);
         return eventService.joinEvent(eventId);
     }
 

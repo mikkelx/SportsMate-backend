@@ -100,10 +100,12 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id: " + eventId + " not found"));
 
         if(!event.isActive()) {
+            log.info("Cannot join inactive event!");
             return ResponseEntity.badRequest().body("Cannot join inactive event!");
         }
 
         if(event.getParticipantsNumber() >= event.getMaxParticipantsNumber()) {
+            log.info("Event is full!");
             return ResponseEntity.badRequest().body("Event is full!");
         }
 
@@ -111,6 +113,7 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
 
         if(userRepository.existsByUserIdAndEventId(user.getUserId(), eventId)) {
+            log.info("Cannot join same event twice");
             return ResponseEntity.badRequest().body("Cannot join same event twice");
         }
 
@@ -147,10 +150,13 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
 
-        User user = userRepository.findById(AuthService.getCurrentUserId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+//        User user = userRepository.findById(AuthService.getCurrentUserId())
+//                .orElseThrow(() -> new NotFoundException("User not found"));
+//        user.leaveEvent(event);
+//        userRepository.save(user);
 
-        user.leaveEvent(event);
+        event.getUsers().forEach(user -> user.leaveEvent(event));
+        eventRepository.save(event);
 
         commentService.deleteAllCommentsByEventId(eventId);
         eventRepository.delete(event);
