@@ -42,20 +42,25 @@ public class AuthService {
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         if(!isRegisterRequestValid(registerRequest)) {
-            return ResponseEntity.badRequest().body("Register request is invalid");
-        }
-
-        if(checkIfUserExists(registerRequest.getEmail())) { //409 resource conflict
-            return ResponseEntity.status(409).body("User with email: " + registerRequest.getEmail() + " is already registered!");
-        }
-
-        if(!verifyPassword(registerRequest.getPassword(), registerRequest.getPasswordRepeated())) {
-            return ResponseEntity.badRequest().body("Password is not matching conditions");
+            return ResponseEntity.badRequest().body("Wprowadź wszystkie dane");
         }
 
         if(!isEmailValid(registerRequest.getEmail())) {
-            return ResponseEntity.badRequest().body("Email is not matching requirements");
+            return ResponseEntity.badRequest().body("Niepoprawny adres email");
         }
+
+        if(checkIfUserExists(registerRequest.getEmail())) {
+            return ResponseEntity.status(409).body("Użytkownik o adresie " + registerRequest.getEmail() + " email już istnieje");
+        }
+
+        if(!registerRequest.getPassword().equals(registerRequest.getPasswordRepeated())) {
+            return ResponseEntity.badRequest().body("Hasła nie są takie same");
+        }
+
+        if(!verifyPassword(registerRequest.getPassword(), registerRequest.getPasswordRepeated())) {
+            return ResponseEntity.badRequest().body("Hasło nie spełnia wymagań, jest za słabe");
+        }
+        
 
         User user = new User();
         user.setEmail(registerRequest.getEmail());
@@ -72,12 +77,12 @@ public class AuthService {
         try{
             UserRecord createdUser = firebaseAuth.createUser(request);
             this.setUserRole(createdUser.getUid(), "USER");
-            return ResponseEntity.status(201).body("User created with id: " + createdUser.getUid());
+            return ResponseEntity.status(201).body("Użytkownik został zarejestrowany");
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);
             log.warn("Error registering user with email: " + registerRequest.getEmail());
             log.warn(e.toString());
-            return ResponseEntity.internalServerError().body("User with email" + registerRequest.getEmail() + " not registered");
+            return ResponseEntity.internalServerError().body("Błąd podczas rejestracji użytkownika");
         }
     }
 
@@ -151,10 +156,6 @@ public class AuthService {
         }
 
         if (request.getPasswordRepeated() == null || request.getPasswordRepeated().isEmpty()) {
-            return false;
-        }
-
-        if (!request.getPassword().equals(request.getPasswordRepeated())) {
             return false;
         }
 
