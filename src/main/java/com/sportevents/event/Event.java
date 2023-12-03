@@ -69,6 +69,10 @@ public class Event {
         this.participantsNumber++;
     }
 
+    public void decreaseParticipantsNumber() {
+        this.participantsNumber--;
+    }
+
     public void addValue(String key, String value) {
         this.values.put(key, value);
     }

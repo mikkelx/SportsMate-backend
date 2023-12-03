@@ -32,22 +32,6 @@ public class EventController {
         return ResponseEntity.ok().body(event);
     }
 
-//    @GetMapping("/history")
-//    public ResponseEntity<List<Event>> getHistoryEvents() {
-//        return ResponseEntity.ok(eventService.getHistoryEvents());
-//    }
-
-//    @GetMapping("/x")
-//    public ResponseEntity<Event> getEvent2() {
-//        Event event = new Event();
-//        Sport sport = new Sport("Piłka nożna");
-//        sport.addAttribute("Czas gry");
-//        event.setLocation(new Location());
-//        event.setSport(sport);
-//        event.addValue("Czas gry", "2h");
-//        return ResponseEntity.ok().body(event);
-//    }
-
     @PostMapping
     @Transactional
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
@@ -61,10 +45,16 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
     }
 
-    @GetMapping("/join")
+    @PutMapping("/join")
     public ResponseEntity<?> joinEventById(@RequestParam Long eventId) {
         log.info("Joining event with id: " + eventId);
         return eventService.joinEvent(eventId);
+    }
+
+    @PutMapping("/leave")
+    public ResponseEntity<?> leaveEventById(@RequestParam Long eventId) {
+        log.info("Leaving event with id: " + eventId);
+        return eventService.leaveEvent(eventId);
     }
 
     @GetMapping("/users")

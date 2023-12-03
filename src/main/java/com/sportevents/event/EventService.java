@@ -177,8 +177,24 @@ public class EventService {
         return distance;
     }
 
+    public ResponseEntity<?> leaveEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id: " + eventId + " not found"));
 
-//    public List<Event> getHistoryEvents() {
-//        return userRepository.findJoinedEventsByUserId(AuthService.getCurrentUserId());
-//    }
+        if(!event.isActive()) {
+            return ResponseEntity.badRequest().body("Cannot leave inactive event!");
+        }
+
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("Event with id: " + AuthService.getCurrentUserId() + " not found"));
+
+
+        event.decreaseParticipantsNumber();
+
+        user.leaveEvent(event);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body("");
+    }
+
 }
