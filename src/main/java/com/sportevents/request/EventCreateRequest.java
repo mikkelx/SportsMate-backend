@@ -1,5 +1,6 @@
 package com.sportevents.request;
 
+import com.sportevents.common.SportLevel;
 import com.sportevents.location.Location;
 import com.sportevents.sport.Sport;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class EventCreateRequest {
     private Date date;
     private String description;
     private int maxParticipantsNumber;
+    private SportLevel sportLevel;
     private Location location;
     private Sport sport;
     private Map<String, String> values;

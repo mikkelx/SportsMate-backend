@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.database.annotations.Nullable;
 import com.sportevents.comment.Comment;
+import com.sportevents.common.SportLevel;
 import com.sportevents.location.Location;
 import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
@@ -36,6 +37,7 @@ public class Event {
     private boolean isCyclical = false;
     @Nullable
     private int cyclicalPeriodInDays;
+    private SportLevel sportLevel;
 
     @ElementCollection
     @MapKeyColumn(name = "name")
