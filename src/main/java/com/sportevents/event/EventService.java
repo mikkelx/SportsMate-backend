@@ -2,6 +2,7 @@ package com.sportevents.event;
 
 import com.sportevents.auth.AuthService;
 import com.sportevents.comment.CommentService;
+import com.sportevents.exception.EventCreateException;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,6 +53,11 @@ public class EventService {
         event.setOrganizerId(AuthService.getCurrentUserId());
         event.setActive(true);
         event.setParticipantsNumber(1);
+
+        if(new Date().after(event.getDate())) {
+            log.info("Nie można utworzyć wydarzenia w przeszłości");
+            throw new EventCreateException("Nie można utworzyć wydarzenia w przeszłości");
+        }
 
         locationRepository.save(event.getLocation());
 
@@ -88,12 +95,33 @@ public class EventService {
                 .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
                 .peek(event -> {
                     event.setDistance(calculateDistance(myLocation, event.getLocation()));
-//                    event.setJoined(event.getUsers()
-//                            .stream()
-//                            .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
+                    event.setJoined(event.getUsers()
+                            .stream()
+                            .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<Event> getEventsByRangeAndSport(Location myLocation, Float range, Long sportId) {
+        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportId(true, sportId);
+
+        return eventsList.stream()
+                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+                .peek(event -> {
+                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
+                .collect(Collectors.toList());
+    }
+
+    public List<Event> getEventsByRangeAndSportAndDate(Location myLocation, Float range, Long sportId, Date date) {
+        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportIdAndDateAfter(true, sportId, date);
+
+        return eventsList.stream()
+                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+                .peek(event -> {
+                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
+                .collect(Collectors.toList());
+    }
+
 
     public ResponseEntity<?> joinEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
@@ -154,6 +182,8 @@ public class EventService {
 //                .orElseThrow(() -> new NotFoundException("User not found"));
 //        user.leaveEvent(event);
 //        userRepository.save(user);
+
+
 
         event.getUsers().forEach(user -> user.leaveEvent(event));
         eventRepository.save(event);

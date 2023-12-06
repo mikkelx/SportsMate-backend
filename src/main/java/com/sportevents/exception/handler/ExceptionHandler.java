@@ -1,5 +1,6 @@
 package com.sportevents.exception.handler;
 
+import com.sportevents.exception.EventCreateException;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.exception.RegisterException;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,12 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = { RegisterException.class})
     protected ResponseEntity<Object> handleDatabaseGet(RegisterException exception, WebRequest request) {
+        logger.error(exception.getMessage());
+        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = { EventCreateException.class})
+    protected ResponseEntity<Object> handleDatabaseGet(EventCreateException exception, WebRequest request) {
         logger.error(exception.getMessage());
         return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
