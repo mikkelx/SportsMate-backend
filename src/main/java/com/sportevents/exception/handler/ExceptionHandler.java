@@ -34,4 +34,10 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = { RuntimeException.class})
+    protected ResponseEntity<Object> handleDatabaseGet(RuntimeException exception, WebRequest request) {
+        logger.error(exception.getMessage());
+        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
 }

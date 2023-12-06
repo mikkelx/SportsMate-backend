@@ -1,11 +1,11 @@
 package com.sportevents.event;
 
+import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -13,11 +13,14 @@ import java.util.Date;
 @Slf4j
 public class EventScheduler {
 
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    public EventScheduler(EventRepository eventRepository) {
+    public EventScheduler(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     @Async

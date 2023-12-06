@@ -4,6 +4,8 @@ package com.sportevents.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sportevents.event.Event;
+import com.sportevents.notification.Notification;
+import com.sportevents.sport.Sport;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +38,10 @@ public class User {
     )
     private List<Event> joinedEvents = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(name="user_preferences", joinColumns=@JoinColumn(name="userId"))
+    private List<Long> sportPreferences = new ArrayList<>();
+
     public void joinEvent(Event event) {
         this.joinedEvents.add(event);
     }
@@ -43,4 +49,21 @@ public class User {
     public void leaveEvent(Event event) {
         this.joinedEvents.remove(event);
     }
+
+    public boolean addSportPreference(Long sportId) {
+        if(!this.sportPreferences.contains(sportId)) {
+            this.sportPreferences.add(sportId);
+            return true;
+        } else return false;
+    }
+
+    public void deleteSportPreference(Long sportId) {
+        this.sportPreferences.remove(sportId);
+    }
+
+    public void wipeSportPreferences() {
+        this.sportPreferences.clear();
+    }
+
+
 }

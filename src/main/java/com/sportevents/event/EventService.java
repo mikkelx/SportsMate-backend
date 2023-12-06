@@ -6,6 +6,8 @@ import com.sportevents.exception.EventCreateException;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
+import com.sportevents.notification.Notification;
+import com.sportevents.notification.NotificationService;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.sport.SportRepository;
 import com.sportevents.user.User;
@@ -36,15 +38,18 @@ public class EventService {
     private final UserRepository userRepository;
     private final CommentService commentService;
     private final ModelMapper modelMapper;
+    private final NotificationService notificationService;
 
     @Autowired
     public EventService(LocationRepository locationRepository, EventRepository eventRepository,
-                        UserRepository userRepository, CommentService commentService, ModelMapper modelMapper) {
+                        UserRepository userRepository, CommentService commentService, ModelMapper modelMapper,
+                        NotificationService notificationService) {
         this.locationRepository = locationRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.commentService = commentService;
         this.modelMapper = modelMapper;
+        this.notificationService = notificationService;
     }
 
     public Event createEvent(EventCreateRequest eventRequest) {
@@ -61,10 +66,14 @@ public class EventService {
 
         locationRepository.save(event.getLocation());
 
+
         User user = userRepository.findById(AuthService.getCurrentUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.joinEvent(event);
+
+        //notify interested users of new event
+        notificationService.notifyUsersOfNewEvent(event.getSport().getSportId());
 
         return eventRepository.save(event);
     }
@@ -177,6 +186,8 @@ public class EventService {
         if(!AuthService.getCurrentUserId().equals(event.getOrganizerId())) {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
+
+
 
 //        User user = userRepository.findById(AuthService.getCurrentUserId())
 //                .orElseThrow(() -> new NotFoundException("User not found"));

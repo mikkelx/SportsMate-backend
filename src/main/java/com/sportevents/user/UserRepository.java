@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
         @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u JOIN u.joinedEvents e WHERE u.userId = :userId AND e.id = :eventId")
         boolean existsByUserIdAndEventId(@Param("userId") Long userId, @Param("eventId") Long eventId);
+
+        @Query("SELECT u FROM User u JOIN u.sportPreferences sp WHERE sp IN :preferences")
+        List<User> findBySportPreferences(List<Long> preferences);
 }

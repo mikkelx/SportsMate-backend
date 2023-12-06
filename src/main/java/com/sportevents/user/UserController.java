@@ -40,4 +40,28 @@ public class UserController {
         return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserRole()));
     }
 
+    @PutMapping("/unblock")
+    public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
+        User user = userService.unblockUser(userId);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PutMapping("/sport/preference")
+    public ResponseEntity<?> setSportPreference(@RequestParam Long sportId) {
+        userService.setSportPreference(sportId);
+        return ResponseEntity.ok().body("Zapisano preferencje sportowe");
+    }
+
+    @DeleteMapping("/sport/preference/delete")
+    public ResponseEntity<?> deleteSportPreference(@RequestParam Long sportId) {
+        userService.deleteSportPreference(sportId);
+        return ResponseEntity.ok().body("Usunięto preferencje sportowe");
+    }
+
+    @DeleteMapping("/sport/preference/delete/all")
+    public ResponseEntity<?> deleteAllSportPreferences() {
+        userService.deleteAllSportPreferences();
+        return ResponseEntity.ok().body("Usunięto wszystkie preferencje sportowe");
+    }
+
 }

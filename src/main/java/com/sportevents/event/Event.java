@@ -1,8 +1,6 @@
 package com.sportevents.event;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.database.annotations.Nullable;
 import com.sportevents.comment.Comment;
@@ -11,7 +9,6 @@ import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import java.util.*;
 
@@ -23,6 +20,7 @@ import java.util.*;
 @Entity
 @ToString
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
