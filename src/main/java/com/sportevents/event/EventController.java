@@ -3,6 +3,7 @@ package com.sportevents.event;
 import com.sportevents.dto.Message;
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
+import com.sportevents.request.FilterCriteria;
 import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,12 @@ public class EventController {
     @Transactional
     public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
         return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
+    }
+
+    @PostMapping("/filter")
+    @Transactional
+    public ResponseEntity<List<Event>> getEventsByFilter(@RequestBody FilterCriteria filterCriteria) {
+        return ResponseEntity.ok(eventService.filterEvents(filterCriteria));
     }
 
     @PutMapping("/join")

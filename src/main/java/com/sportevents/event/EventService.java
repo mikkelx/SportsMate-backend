@@ -9,6 +9,7 @@ import com.sportevents.location.LocationRepository;
 import com.sportevents.notification.Notification;
 import com.sportevents.notification.NotificationService;
 import com.sportevents.request.EventCreateRequest;
+import com.sportevents.request.FilterCriteria;
 import com.sportevents.sport.SportRepository;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
@@ -24,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.sportevents.specifications.EventSpecs.mainFilter;
 
 @Service
 @Slf4j
@@ -111,25 +114,39 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public List<Event> getEventsByRangeAndSport(Location myLocation, Float range, Long sportId) {
-        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportId(true, sportId);
+    public List<Event> filterEvents(FilterCriteria filterCriteria) {
+        List<Event> eventsList = eventRepository.findAll(mainFilter(filterCriteria));
 
         return eventsList.stream()
-                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+                .filter(event-> calculateDistance(filterCriteria.getUserLocation(), event.getLocation()) <= filterCriteria.getRange())
                 .peek(event -> {
-                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
+                    event.setDistance(calculateDistance(filterCriteria.getUserLocation(), event.getLocation()));
+                    event.setJoined(event.getUsers()
+                            .stream()
+                            .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
+                })
                 .collect(Collectors.toList());
     }
 
-    public List<Event> getEventsByRangeAndSportAndDate(Location myLocation, Float range, Long sportId, Date date) {
-        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportIdAndDateAfter(true, sportId, date);
-
-        return eventsList.stream()
-                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
-                .peek(event -> {
-                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
-                .collect(Collectors.toList());
-    }
+//    public List<Event> getEventsByRangeAndSport(Location myLocation, Float range, Long sportId) {
+//        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportId(true, sportId);
+//
+//        return eventsList.stream()
+//                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+//                .peek(event -> {
+//                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Event> getEventsByRangeAndSportAndDate(Location myLocation, Float range, Long sportId, Date date) {
+//        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportIdAndDateAfter(true, sportId, date);
+//
+//        return eventsList.stream()
+//                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
+//                .peek(event -> {
+//                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
+//                .collect(Collectors.toList());
+//    }
 
 
     public ResponseEntity<?> joinEvent(Long eventId) {
