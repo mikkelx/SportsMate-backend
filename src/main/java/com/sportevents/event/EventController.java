@@ -47,13 +47,11 @@ public class EventController {
 
     @PutMapping("/join")
     public ResponseEntity<?> joinEventById(@RequestParam Long eventId) {
-        log.info("Joining event with id: " + eventId);
         return eventService.joinEvent(eventId);
     }
 
     @PutMapping("/leave")
     public ResponseEntity<?> leaveEventById(@RequestParam Long eventId) {
-        log.info("Leaving event with id: " + eventId);
         return eventService.leaveEvent(eventId);
     }
 

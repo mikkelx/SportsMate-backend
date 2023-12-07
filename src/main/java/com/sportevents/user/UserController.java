@@ -49,19 +49,19 @@ public class UserController {
     @PutMapping("/sport/preference")
     public ResponseEntity<?> setSportPreference(@RequestParam Long sportId) {
         userService.setSportPreference(sportId);
-        return ResponseEntity.ok().body("Zapisano preferencje sportowe");
+        return ResponseEntity.ok().body("Sport preference was set");
     }
 
     @DeleteMapping("/sport/preference")
     public ResponseEntity<?> deleteSportPreference(@RequestParam Long sportId) {
         userService.deleteSportPreference(sportId);
-        return ResponseEntity.ok().body("Usunięto preferencję sportową");
+        return ResponseEntity.ok().body("Sport preference was deleted");
     }
 
     @DeleteMapping("/sport/preference/all")
     public ResponseEntity<?> deleteAllSportPreferences() {
         userService.deleteAllSportPreferences();
-        return ResponseEntity.ok().body("Usunięto wszystkie preferencje sportowe");
+        return ResponseEntity.ok().body("Sport preferences were deleted");
     }
 
 }

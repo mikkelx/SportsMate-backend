@@ -60,8 +60,8 @@ public class EventService {
         event.setParticipantsNumber(1);
 
         if(new Date().after(event.getDate())) {
-            log.info("Nie można utworzyć wydarzenia w przeszłości");
-            throw new EventCreateException("Nie można utworzyć wydarzenia w przeszłości");
+            log.info("You cannot create event in the past!");
+            throw new EventCreateException("You cannot create event in the past!");
         }
 
         locationRepository.save(event.getLocation());
@@ -194,8 +194,6 @@ public class EventService {
 //        user.leaveEvent(event);
 //        userRepository.save(user);
 
-
-
         event.getUsers().forEach(user -> user.leaveEvent(event));
         eventRepository.save(event);
 
@@ -203,19 +201,6 @@ public class EventService {
         eventRepository.delete(event);
 
         return ResponseEntity.ok().body("");
-    }
-
-    private double calculateDistance(Location myLocation, Location objectLocation) {
-        double lt1 = myLocation.getLat();
-        double ln1 = myLocation.getLng();
-        double lt2 = objectLocation.getLat();
-        double ln2 = objectLocation.getLng();
-
-        double x = lt1 * d2r;
-        double y = lt2 * d2r;
-        double distance = Math.acos( Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos(d2r * (ln1 - ln2))) * d2km;
-        distance = distance / 1000;
-        return distance;
     }
 
     public ResponseEntity<?> leaveEvent(Long eventId) {
@@ -237,5 +222,19 @@ public class EventService {
 
         return ResponseEntity.ok().body("");
     }
+
+    private double calculateDistance(Location myLocation, Location objectLocation) {
+        double lt1 = myLocation.getLat();
+        double ln1 = myLocation.getLng();
+        double lt2 = objectLocation.getLat();
+        double ln2 = objectLocation.getLng();
+
+        double x = lt1 * d2r;
+        double y = lt2 * d2r;
+        double distance = Math.acos( Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos(d2r * (ln1 - ln2))) * d2km;
+        distance = distance / 1000;
+        return distance;
+    }
+
 
 }

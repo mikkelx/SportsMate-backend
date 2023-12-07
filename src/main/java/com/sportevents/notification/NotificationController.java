@@ -15,11 +15,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<?> createNotification(@RequestBody Notification notification) {
-//        return notificationService.createNotification(notification);
-//    }
-
     @GetMapping
     public ResponseEntity<?> getNotifications() {
         return notificationService.getNotifications();

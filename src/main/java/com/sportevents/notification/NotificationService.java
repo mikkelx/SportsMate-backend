@@ -51,7 +51,7 @@ public class NotificationService {
 
     public ResponseEntity<?> readNotification(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(
-                () -> new NotFoundException("Powiadomienie nie zostało odnalezione!"));
+                () -> new NotFoundException("Notification was not found!"));
         notification.setSeen(true);
         return ResponseEntity.ok().body(notificationRepository.save(notification));
     }
@@ -59,8 +59,7 @@ public class NotificationService {
     public void notifyUsersOfNewEvent(Long sportId) {
         List<User> users = userRepository.findBySportPreferences(List.of(sportId));
         for (User user : users) {
-            createNotification("Nowe wydarzenie", "W Twojej okolicy pojawiło się nowe wydarzenie, " +
-                    "którym możesz być zainteresowany!");
+            createNotification("New event", "There is a new event that you may be interested in!");
         }
     }
 

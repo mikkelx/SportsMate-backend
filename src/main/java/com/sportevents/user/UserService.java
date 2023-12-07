@@ -43,11 +43,11 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if(!sportRepository.existsById(sportId))
-            throw new NotFoundException("Sport nie istnieje");
+            throw new NotFoundException("Sport does not exist");
 
         //TODO - change exception type
         if(!user.addSportPreference(sportId))
-            throw new RuntimeException("Sport już został dodany");
+            throw new RuntimeException("Sport preference already exists");
         return userRepository.save(user);
     }
 
@@ -56,7 +56,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if(!sportRepository.existsById(sportId))
-            throw new NotFoundException("Sport nie istnieje");
+            throw new NotFoundException("Sport does not exist");
 
         user.deleteSportPreference(sportId);
         userRepository.save(user);
