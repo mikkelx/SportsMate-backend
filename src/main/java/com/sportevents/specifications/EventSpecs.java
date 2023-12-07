@@ -53,7 +53,7 @@ public class EventSpecs {
                         filterCriteria.getParticipantsNumberEnd()));
             }
 
-            //basic filter - nad not that far away
+            //basic filter - get only events in range of about 10km
             if(filterCriteria.getUserLocation() != null ) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(
                         root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() + 0.1));
