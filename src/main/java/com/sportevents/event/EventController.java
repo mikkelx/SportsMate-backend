@@ -51,26 +51,31 @@ public class EventController {
     }
 
     @PutMapping("/join")
+    @Transactional
     public ResponseEntity<?> joinEventById(@RequestParam Long eventId) {
         return eventService.joinEvent(eventId);
     }
 
     @PutMapping("/leave")
+    @Transactional
     public ResponseEntity<?> leaveEventById(@RequestParam Long eventId) {
         return eventService.leaveEvent(eventId);
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getEventsByRange(@RequestParam Long eventId) {
+    @Transactional
+    public ResponseEntity<List<User>> getEventUsersByRange(@RequestParam Long eventId) {
         return ResponseEntity.ok(eventService.getEventUsers(eventId));
     }
 
     @PostMapping("/start")
+    @Transactional
     public ResponseEntity<?> startEventById(Long eventId) {
         return eventService.startEvent(eventId);
     }
 
     @DeleteMapping
+    @Transactional
     public ResponseEntity<?> deleteEventById(Long eventId) {
         return eventService.deleteEvent(eventId);
     }
