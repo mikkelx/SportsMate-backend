@@ -30,8 +30,12 @@ public class EventSpecs {
                 predicates.add(criteriaBuilder.equal(root.get("sportLevel"),filterCriteria.getSportLevel()));
             }
 
-            if(filterCriteria.getSport() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("sport"),filterCriteria.getSport()));
+            if (filterCriteria.isCyclical()) {
+                predicates.add(criteriaBuilder.equal(root.get("isCyclical"), filterCriteria.isCyclical()));
+            }
+
+            if(filterCriteria.getSport() != null && !filterCriteria.getSport().isEmpty()) {
+                predicates.add(root.get("sport").in(filterCriteria.getSport()));
             }
 
             if(filterCriteria.getParticipantsNumberStart() != 0 && filterCriteria.getParticipantsNumberEnd() != 0) {

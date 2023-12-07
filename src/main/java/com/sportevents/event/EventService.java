@@ -115,14 +115,18 @@ public class EventService {
         List<Event> eventsList = eventRepository.findAll(mainFilter(filterCriteria));
 
         return eventsList.stream()
-                .filter(event-> calculateDistance(filterCriteria.getUserLocation(), event.getLocation()) <= filterCriteria.getRange())
+                .filter(event -> {
+                    double distance = calculateDistance(filterCriteria.getUserLocation(), event.getLocation());
+                    event.setDistance(distance);
+                    return distance <= filterCriteria.getRange();
+                })
                 .peek(event -> {
-                    event.setDistance(calculateDistance(filterCriteria.getUserLocation(), event.getLocation()));
                     event.setJoined(event.getUsers()
                             .stream()
-                            .filter(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())).count() > 0);
+                            .anyMatch(user -> Objects.equals(user.getUserId(), AuthService.getCurrentUserId())));
                 })
                 .collect(Collectors.toList());
+
     }
 
 //    public List<Event> getEventsByRangeAndSport(Location myLocation, Float range, Long sportId) {

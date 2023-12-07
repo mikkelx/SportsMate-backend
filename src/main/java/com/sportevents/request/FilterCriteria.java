@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class FilterCriteria {
     private Date dateEnd;
     private boolean isCyclical;
     private SportLevel sportLevel;
-    private Sport sport;
+    private List<Sport> sport;
     private int participantsNumberStart;
     private int participantsNumberEnd;
 }
