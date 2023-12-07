@@ -48,11 +48,6 @@ public class Event {
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
 
-    // @JsonManagedReference
-    // @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval =
-    // true, fetch = FetchType.LAZY)
-    // private List<Comment> comments = new ArrayList<>();
-
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
