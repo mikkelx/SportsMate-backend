@@ -1,6 +1,5 @@
 package com.sportevents.event;
 
-import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -16,12 +15,9 @@ public class EventScheduler {
 
     private final EventRepository eventRepository;
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public EventScheduler(EventRepository eventRepository, UserRepository userRepository) {
+    public EventScheduler(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
     }
 
     @Async

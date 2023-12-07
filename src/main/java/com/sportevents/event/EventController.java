@@ -1,10 +1,8 @@
 package com.sportevents.event;
 
-import com.sportevents.dto.Message;
 import com.sportevents.location.Location;
 import com.sportevents.request.EventCreateRequest;
 import com.sportevents.request.FilterCriteria;
-import com.sportevents.sport.Sport;
 import com.sportevents.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

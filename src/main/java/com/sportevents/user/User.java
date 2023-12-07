@@ -1,11 +1,8 @@
 package com.sportevents.user;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sportevents.event.Event;
-import com.sportevents.notification.Notification;
-import com.sportevents.sport.Sport;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

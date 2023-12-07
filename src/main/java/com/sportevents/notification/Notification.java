@@ -1,6 +1,5 @@
 package com.sportevents.notification;
 
-import com.sportevents.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

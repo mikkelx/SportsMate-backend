@@ -4,7 +4,6 @@ import com.sportevents.auth.AuthService;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

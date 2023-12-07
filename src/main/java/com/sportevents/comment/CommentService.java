@@ -7,7 +7,6 @@ import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

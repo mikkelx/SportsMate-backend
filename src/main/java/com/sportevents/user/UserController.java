@@ -2,7 +2,6 @@ package com.sportevents.user;
 
 import com.sportevents.auth.AuthService;
 import com.sportevents.dto.Message;
-import com.sportevents.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
