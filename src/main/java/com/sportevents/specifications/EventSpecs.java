@@ -35,23 +35,34 @@ public class EventSpecs {
             }
 
             if(filterCriteria.getParticipantsNumberStart() != 0 && filterCriteria.getParticipantsNumberEnd() != 0) {
-                predicates.add(criteriaBuilder.between(root.get("participantsNumber"),filterCriteria.getParticipantsNumberStart(),filterCriteria.getParticipantsNumberEnd()));
+                predicates.add(criteriaBuilder.between(root.get(
+                        "participantsNumber"),
+                        filterCriteria.getParticipantsNumberStart(),
+                        filterCriteria.getParticipantsNumberEnd()));
             }
 
             if(filterCriteria.getParticipantsNumberStart() != 0) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("participantsNumber"),filterCriteria.getParticipantsNumberStart()));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        root.get("participantsNumber"),
+                        filterCriteria.getParticipantsNumberStart()));
             }
 
             if(filterCriteria.getParticipantsNumberEnd() != 0) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("participantsNumber"),filterCriteria.getParticipantsNumberEnd()));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        root.get("participantsNumber"),
+                        filterCriteria.getParticipantsNumberEnd()));
             }
 
             //basic filter - nad not that far away
             if(filterCriteria.getUserLocation() != null ) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() + 0.1));
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() - 0.1));
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() + 0.15));
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() - 0.15));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() + 0.1));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() - 0.1));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() + 0.15));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() - 0.15));
             }
 
             //always get active events
