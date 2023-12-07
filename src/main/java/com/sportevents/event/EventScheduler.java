@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
 
 @Service
@@ -29,7 +30,13 @@ public class EventScheduler {
         var counterWrapper = new Object(){ int counter = 0; };
         eventRepository.findAllByActiveAndDateBefore(true, new Date()).stream().filter(event -> event.getDate().before(new Date()))
                 .forEach(event -> {
-            event.setActive(false);
+                    if(event.isCyclical()) {
+                        event.setDate(Date.from(event.getDate().toInstant().plus(
+                                Duration.ofDays(event.getCyclicalPeriodInDays())
+                        )));
+                    } else {
+                        event.setActive(false);
+                    }
             eventRepository.save(event);
             counterWrapper.counter++;
         });

@@ -17,7 +17,9 @@ import java.util.Date;
 public class FilterCriteria {
     private Location userLocation;
     private float range;
-    private Date date;
+    private Date dateStart;
+    private Date dateEnd;
+    private boolean cyclical;
     private SportLevel sportLevel;
     private Sport sport;
     private int participantsNumberStart;
