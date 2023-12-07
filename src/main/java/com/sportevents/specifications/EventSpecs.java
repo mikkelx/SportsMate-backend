@@ -46,8 +46,8 @@ public class EventSpecs {
 
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() + 0.1));
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("location").get("lat"),filterCriteria.getUserLocation().getLat() - 0.1));
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() + 0.1));
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() - 0.1));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() + 0.15));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("location").get("lng"),filterCriteria.getUserLocation().getLng() - 0.15));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
