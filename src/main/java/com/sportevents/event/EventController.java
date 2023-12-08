@@ -31,6 +31,7 @@ public class EventController {
         return ResponseEntity.ok().body(event);
     }
 
+    //TODO - add new fields to event creation
     @PostMapping
     @Transactional
     public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
@@ -38,11 +39,11 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @PostMapping("/nearby")
-    @Transactional
-    public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
-        return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
-    }
+//    @PostMapping("/nearby")
+//    @Transactional
+//    public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
+//        return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
+//    }
 
     @PostMapping("/filter")
     @Transactional

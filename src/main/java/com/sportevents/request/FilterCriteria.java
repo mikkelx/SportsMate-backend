@@ -20,7 +20,7 @@ public class FilterCriteria {
     private float range;
     private Date dateStart;
     private Date dateEnd;
-    private boolean isCyclical;
+    private boolean cyclical;
     private SportLevel sportLevel;
     private List<Sport> sport;
     private int participantsNumberStart;
