@@ -22,6 +22,7 @@ public class Comment {
 
     private String content;
 
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
@@ -31,6 +32,9 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User author;
+
+    @Transient
+    private Long userId;
 
     public Comment(String content, Event event, User author) {
         this.content = content;

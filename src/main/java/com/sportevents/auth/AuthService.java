@@ -7,6 +7,7 @@ import com.sportevents.request.RegisterRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.Jar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,8 +50,12 @@ public class AuthService {
             return ResponseEntity.badRequest().body("Niepoprawny adres email");
         }
 
-        if(checkIfUserExists(registerRequest.getEmail())) {
+        if(checkIfUserExistsByEmail(registerRequest.getEmail())) {
             return ResponseEntity.status(409).body("Użytkownik o adresie " + registerRequest.getEmail() + " email już istnieje");
+        }
+
+        if(checkIfUserExistsByUsername(registerRequest.getUsername())) {
+            return ResponseEntity.status(409).body("Użytkownik o nazwie " + registerRequest.getUsername() + " już istnieje");
         }
 
         if(!registerRequest.getPassword().equals(registerRequest.getPasswordRepeated())) {
@@ -86,6 +91,11 @@ public class AuthService {
         }
     }
 
+    private boolean checkIfUserExistsByUsername(String username) {
+        boolean exists = userRepository.existsByUsername(username);
+        return exists;
+    }
+
     private boolean isEmailValid(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -93,7 +103,7 @@ public class AuthService {
         return pattern.matcher(email).matches();
     }
 
-    private boolean checkIfUserExists(String email) {
+    private boolean checkIfUserExistsByEmail(String email) {
         try {
             if(firebaseAuth.getUserByEmail(email) != null) {
                 return true;

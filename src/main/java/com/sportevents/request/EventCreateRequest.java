@@ -20,7 +20,7 @@ public class EventCreateRequest {
     private Date date;
     private String description;
     private int maxParticipantsNumber;
-    private boolean isCyclical;
+    private boolean cyclical;
     private int cyclicalPeriodInDays;
     private SportLevel sportLevel;
     private Location location;

@@ -49,6 +49,7 @@ public class CommentService {
                     commentDto.setContent(comment.getContent());
                     commentDto.setAuthorUsername(comment.getAuthor().getUsername());
                     commentDto.setEventId(eventId);
+                    commentDto.setAuthorId(comment.getAuthor().getUserId());
                     return commentDto;
                 })
                 .toList();

@@ -14,4 +14,5 @@ public class CommentDto {
     private String content;
     private Long eventId;
     private String authorUsername;
+    private Long authorId;
 }
