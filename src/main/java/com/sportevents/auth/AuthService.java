@@ -41,6 +41,10 @@ public class AuthService {
         return role;
     }
 
+    public static boolean isAdmin() {
+        return getCurrentUserRole().equals("`ADMIN");
+    }
+
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         if(!isRegisterRequestValid(registerRequest)) {
             return ResponseEntity.badRequest().body("Wprowadź wszystkie dane");

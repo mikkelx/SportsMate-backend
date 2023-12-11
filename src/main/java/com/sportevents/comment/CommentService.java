@@ -73,6 +73,11 @@ public class CommentService {
         if (!comment.getEvent().getEventId().equals(eventId)) {
             throw new RuntimeException("Comment does not belong to the event");
         }
+
+        if(comment.getAuthor().getUserId() != AuthService.getCurrentUserId() && !AuthService.isAdmin()) {
+            throw new RuntimeException("You are not the author of this comment");
+        }
+
         commentRepository.delete(comment);
     }
 
