@@ -72,10 +72,11 @@ public class EventService {
 
         user.joinEvent(event);
 
-        //notify interested users of new event
-        notificationService.notifyUsersOfNewEvent(event.getSport().getSportId());
+        //save event and notify interested users of new event
+        event = eventRepository.save(event);
+        notificationService.notifyUsersOfNewEvent(event.getEventId(), event.getLocation(), event.getSport().getSportId());
 
-        return eventRepository.save(event);
+        return event;
     }
 
     public Event getEvent(Long eventId) {
@@ -241,7 +242,7 @@ public class EventService {
         return ResponseEntity.ok().body("");
     }
 
-    private double calculateDistance(Location myLocation, Location objectLocation) {
+    public static double calculateDistance(Location myLocation, Location objectLocation) {
         double lt1 = myLocation.getLat();
         double ln1 = myLocation.getLng();
         double lt2 = objectLocation.getLat();

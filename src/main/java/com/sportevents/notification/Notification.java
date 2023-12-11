@@ -21,6 +21,7 @@ public class Notification {
     private String content;
     private Date date;
     private boolean seen;
+    private Long eventId;
     @Column(name = "user_id")
     private Long userId;
 

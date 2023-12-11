@@ -1,6 +1,7 @@
 package com.sportevents.specifications;
 
 import com.sportevents.event.Event;
+import com.sportevents.location.Location;
 import com.sportevents.request.FilterCriteria;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

@@ -2,6 +2,7 @@ package com.sportevents.notification;
 
 import com.sportevents.auth.AuthService;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.location.Location;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+
+import static com.sportevents.event.EventService.calculateDistance;
+import static com.sportevents.specifications.UserSpecs.notificationFilter;
 
 @Service
 public class NotificationService {
@@ -55,11 +59,19 @@ public class NotificationService {
         return ResponseEntity.ok().body(notificationRepository.save(notification));
     }
 
-    public void notifyUsersOfNewEvent(Long sportId) {
-        List<User> users = userRepository.findBySportPreferences(List.of(sportId));
-        for (User user : users) {
-            createNotification("New event", "There is a new event that you may be interested in!");
-        }
+    public void notifyUsersOfNewEvent(Long eventId, Location eventLocation, Long sportId) {
+        List<User> users = userRepository.findAll(notificationFilter(eventLocation, sportId));
+
+        users.stream().filter(
+                user -> calculateDistance(new Location(user.getLastLat(), user.getLastLng()), eventLocation) < user.getRangePreference()
+        ).forEach(user -> {
+            Notification notification = new Notification("New event near you!",
+                    "There is a new event near you!");
+            notification.setUserId(user.getUserId());
+            notification.setEventId(eventId);
+            notificationRepository.save(notification);
+            }
+        );
     }
 
 }
