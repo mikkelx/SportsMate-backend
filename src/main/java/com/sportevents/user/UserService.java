@@ -1,6 +1,7 @@
 package com.sportevents.user;
 
 import com.sportevents.auth.AuthService;
+import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.sport.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final SportRepository sportRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, SportRepository sportRepository) {
+    public UserService(UserRepository userRepository, SportRepository sportRepository, EventRepository eventRepository) {
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
+        this.eventRepository = eventRepository;
     }
 
     public User getUser(Long userId) {
@@ -68,5 +70,16 @@ public class UserService {
 
         user.wipeSportPreferences();
         userRepository.save(user);
+    }
+
+    public Object getSportPreference() {
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return user.getSportPreferences();
+    }
+
+    public Object getEventsCreatedByUser() {
+        return eventRepository.findAllByOrganizerId(AuthService.getCurrentUserId());
     }
 }

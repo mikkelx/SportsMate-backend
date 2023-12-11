@@ -16,6 +16,9 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 
     List<Event> findAllByActiveAndSport_sportIdAndDateAfter(boolean active, Long sportId, Date date);
 
+    List<Event> findAllByOrganizerId(Long organizerId);
+
+
 //    @Query("SELECT a FROM Event a WHERE TYPE(a.sport) = :dtype")
 //    List<Event> findAllEventsBySport(@Param("dtype") Class<?> dtype);
 

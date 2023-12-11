@@ -23,6 +23,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<User> getMe() {
+        User user = userService.getUser(AuthService.getCurrentUserId());
+        return ResponseEntity.ok(user);
+    }
+
     @PutMapping("/block")
     public ResponseEntity<?> blockUser(@RequestParam Long userId) {
         User user = userService.blockUser(userId);
@@ -43,6 +49,17 @@ public class UserController {
     public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
         User user = userService.unblockUser(userId);
         return ResponseEntity.ok().body(user);
+    }
+
+    @GetMapping("/event/created")
+    public ResponseEntity<?> getEventsCreatedByUser() {
+        return ResponseEntity.ok().body(userService.getEventsCreatedByUser());
+    }
+
+
+    @GetMapping("/sport/preference")
+    public ResponseEntity<?> getSportPreference() {
+        return ResponseEntity.ok().body(userService.getSportPreference());
     }
 
     @PutMapping("/sport/preference")
