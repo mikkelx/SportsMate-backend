@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -72,28 +74,33 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getEventsCreatedByUser());
     }
 
-
-    @GetMapping("/sport/preference")
+    @GetMapping("/preference/sport")
     public ResponseEntity<?> getSportPreference() {
         return ResponseEntity.ok().body(userService.getSportPreference());
     }
 
-    @PutMapping("/sport/preference")
-    public ResponseEntity<?> setSportPreference(@RequestParam Long sportId) {
-        userService.setSportPreference(sportId);
+    @PutMapping("/preference/sport")
+    public ResponseEntity<?> setSportPreference(@RequestBody List<Long> sportPreferences) {
+        userService.setSportPreferences(sportPreferences);
         return ResponseEntity.ok().body("Sport preference was set");
     }
 
-    @DeleteMapping("/sport/preference")
+    @DeleteMapping("/preference/sport")
     public ResponseEntity<?> deleteSportPreference(@RequestParam Long sportId) {
         userService.deleteSportPreference(sportId);
         return ResponseEntity.ok().body("Sport preference was deleted");
     }
 
-    @DeleteMapping("/sport/preference/all")
+    @DeleteMapping("/preference/sport/all")
     public ResponseEntity<?> deleteAllSportPreferences() {
         userService.deleteAllSportPreferences();
         return ResponseEntity.ok().body("Sport preferences were deleted");
+    }
+
+    @GetMapping("/preference/range")
+    public ResponseEntity<?> setRangePreference(@RequestParam float range) {
+        userService.setRangePreference(range);
+        return ResponseEntity.ok().body("Range preference was set");
     }
 
 }

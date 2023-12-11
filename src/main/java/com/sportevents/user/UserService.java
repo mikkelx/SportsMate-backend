@@ -4,9 +4,12 @@ import com.sportevents.auth.AuthService;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
+import com.sportevents.sport.Sport;
 import com.sportevents.sport.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -98,5 +101,27 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         return new Location(user.getLastLat(), user.getLastLng());
+    }
+
+    public void setRangePreference(float range) {
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.setRangePreference(range);
+        userRepository.save(user);
+    }
+
+    public void setSportPreferences(List<Long> sportPreferences) {
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        List<Sport> sports = sportRepository.findAll();
+        for(Long sportId : sportPreferences) {
+            if(!sports.stream().anyMatch(sport -> sport.getSportId().equals(sportId)))
+                throw new NotFoundException("Sport with id " + sportId + " does not exist");
+        }
+
+        user.setSportPreferences(sportPreferences);
+        userRepository.save(user);
     }
 }

@@ -27,6 +27,7 @@ public class User {
     private boolean isLocked;
     private float lastLat;
     private float lastLng;
+    private float rangePreference;
 
     @JsonManagedReference
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
