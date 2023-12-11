@@ -42,7 +42,7 @@ public class AuthService {
     }
 
     public static boolean isAdmin() {
-        return getCurrentUserRole().equals("`ADMIN");
+        return getCurrentUserRole().equals("ADMIN");
     }
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
