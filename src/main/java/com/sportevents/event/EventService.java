@@ -74,7 +74,7 @@ public class EventService {
 
         //save event and notify interested users of new event
         event = eventRepository.save(event);
-        notificationService.notifyUsersOfNewEvent(event.getEventId(), event.getLocation(), event.getSport().getSportId());
+        notificationService.notifyUsersOfNewEvent(event);
 
         return event;
     }
