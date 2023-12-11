@@ -1,7 +1,10 @@
 package com.sportevents.user;
 
+import com.google.api.gax.rpc.UnauthenticatedException;
 import com.sportevents.auth.AuthService;
 import com.sportevents.dto.Message;
+import com.sportevents.exception.UnauthorizedException;
+import com.sportevents.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<User> getUser(@RequestParam Long userId) {
+        if(AuthService.getCurrentUserRole() != "ADMIN")
+            throw new UnauthorizedException("You are not authorized to perform this action");
         User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
     }
@@ -49,6 +54,17 @@ public class UserController {
     public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
         User user = userService.unblockUser(userId);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PutMapping("/location")
+    public ResponseEntity<?> setLocation(@RequestBody Location userLastLocation) {
+        userService.setLocation(userLastLocation);
+        return ResponseEntity.ok().body("Location was set");
+    }
+
+    @GetMapping("/location")
+    public ResponseEntity<?> getLocation() {
+        return ResponseEntity.ok().body(userService.getLocation());
     }
 
     @GetMapping("/event/created")

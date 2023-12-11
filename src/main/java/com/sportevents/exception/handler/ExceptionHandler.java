@@ -3,6 +3,7 @@ package com.sportevents.exception.handler;
 import com.sportevents.exception.EventCreateException;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.exception.RegisterException;
+import com.sportevents.exception.UnauthorizedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,14 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         logger.error(exception.getMessage());
         return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = { UnauthorizedException.class})
+    protected ResponseEntity<Object> handleDatabaseGet(UnauthorizedException exception, WebRequest request) {
+        logger.error(exception.getMessage());
+        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+
 
 //    @org.springframework.web.bind.annotation.ExceptionHandler(value = { RuntimeException.class})
 //    protected ResponseEntity<Object> handleDatabaseGet(RuntimeException exception, WebRequest request) {

@@ -3,6 +3,7 @@ package com.sportevents.user;
 import com.sportevents.auth.AuthService;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.location.Location;
 import com.sportevents.sport.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,21 @@ public class UserService {
 
     public Object getEventsCreatedByUser() {
         return eventRepository.findAllByOrganizerId(AuthService.getCurrentUserId());
+    }
+
+    public void setLocation(Location location) {
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.setLastLat(location.getLat());
+        user.setLastLng(location.getLng());
+        userRepository.save(user);
+    }
+
+    public Object getLocation() {
+        User user = userRepository.findById(AuthService.getCurrentUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return new Location(user.getLastLat(), user.getLastLng());
     }
 }

@@ -70,6 +70,7 @@ public class AuthService {
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
+        user.resetLocation();
         user = userRepository.save(user);
 
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()

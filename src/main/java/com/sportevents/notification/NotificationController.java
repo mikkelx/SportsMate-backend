@@ -20,9 +20,9 @@ public class NotificationController {
         return notificationService.getNotifications();
     }
 
-    @GetMapping("/expired")
-    public ResponseEntity<?> getExpiredNotifications() {
-        return notificationService.getExpiredNotifications();
+    @GetMapping("/history")
+    public ResponseEntity<?> getNotificationHistory() {
+        return notificationService.getNotificationHistory();
     }
 
     @PutMapping("/read")

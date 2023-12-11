@@ -25,6 +25,8 @@ public class User {
     private String username;
     private String email;
     private boolean isLocked;
+    private float lastLat;
+    private float lastLng;
 
     @JsonManagedReference
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -52,6 +54,11 @@ public class User {
             this.sportPreferences.add(sportId);
             return true;
         } else return false;
+    }
+
+    public void resetLocation() {
+        this.lastLat = 0;
+        this.lastLng = 0;
     }
 
     public void deleteSportPreference(Long sportId) {

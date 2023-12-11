@@ -43,7 +43,7 @@ public class NotificationService {
 
     }
 
-    public ResponseEntity<?> getExpiredNotifications() {
+    public ResponseEntity<?> getNotificationHistory() {
         return ResponseEntity.ok().body(notificationRepository.findAllByUserId(AuthService.getCurrentUserId()));
 
     }
