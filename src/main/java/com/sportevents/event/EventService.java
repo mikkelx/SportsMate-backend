@@ -185,7 +185,11 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
 
-        event.getUsers().forEach(user -> user.leaveEvent(event));
+        event.getUsers().forEach(user -> {
+                    user.leaveEvent(event);
+                    notificationService.notifyUserOfEventCancellation(user.getUserId(), eventId);
+                }
+        );
         eventRepository.save(event);
 
         commentService.deleteAllCommentsByEventId(eventId);

@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.sportevents.common.UserRole;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.notification.NotificationService;
 import com.sportevents.request.RegisterRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
@@ -25,11 +26,13 @@ public class AuthService {
 
     private FirebaseAuth firebaseAuth;
     private UserRepository userRepository;
+    private NotificationService notificationService;
 
     @Autowired
-    public AuthService(FirebaseAuth firebaseAuth, UserRepository userRepository) {
+    public AuthService(FirebaseAuth firebaseAuth, UserRepository userRepository, NotificationService notificationService) {
         this.firebaseAuth = firebaseAuth;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public static Long getCurrentUserId() {
@@ -90,9 +93,11 @@ public class AuthService {
         try{
             UserRecord createdUser = firebaseAuth.createUser(request);
             this.setUserRole(createdUser.getUid(), "USER");
+            this.setLockedClaim(createdUser.getUid(), false);
             return ResponseEntity.status(201).body("Użytkownik został zarejestrowany");
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);
+            this.deleteUserFromFirebase(user.getUserId());
             log.warn("Error registering user with email: " + registerRequest.getEmail());
             log.warn(e.toString());
             return ResponseEntity.internalServerError().body("Błąd podczas rejestracji użytkownika");
@@ -110,6 +115,15 @@ public class AuthService {
         return pattern.matcher(email).matches();
     }
 
+    private void deleteUserFromFirebase(Long userId) {
+        try {
+            firebaseAuth.deleteUser(userId.toString());
+        } catch (FirebaseAuthException e) {
+            log.warn("Error deleting user with id: " + userId);
+            log.warn(e.toString());
+        }
+    }
+
     private boolean checkIfUserExistsByEmail(String email) {
         try {
             if(firebaseAuth.getUserByEmail(email) != null) {
@@ -121,14 +135,23 @@ public class AuthService {
         return false;
     }
 
-    private void setUserRole(String userId, String role) {
-        Map<String, Object> claims = new HashMap<>();
+    private void setUserRole(String userId, String role) throws FirebaseAuthException {
+        Map<String, Object> claims = this.getUserClaims(userId);
         claims.put("role", role);
-        try {
-            firebaseAuth.setCustomUserClaims(userId, claims);
-        } catch (FirebaseAuthException e) {
-            log.error("Error while assigning user role");
-        }
+        firebaseAuth.setCustomUserClaims(userId, claims);
+    }
+
+    private void setLockedClaim(String userId, boolean locked) throws FirebaseAuthException {
+        Map<String, Object> claims = this.getUserClaims(userId);
+        claims.put("locked", locked);
+        firebaseAuth.setCustomUserClaims(userId, claims);
+    }
+
+    private Map<String, Object> getUserClaims(String userId) throws FirebaseAuthException {
+        Map<String, Object> firebaseClaims = firebaseAuth.getUser(userId).getCustomClaims();
+        if(firebaseClaims.isEmpty())
+            return new HashMap<>();
+        else return new HashMap<>(firebaseClaims);
     }
 
     private boolean verifyPassword(String password, String repeatedPassword) {
@@ -187,7 +210,11 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
 
-        this.setUserRole(user.getUserId().toString(), "ADMIN");
+        try {
+            this.setUserRole(user.getUserId().toString(), "ADMIN");
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
         user.setRole(UserRole.ADMIN);
 
         userRepository.save(user);
@@ -197,9 +224,40 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
 
-        this.setUserRole(user.getUserId().toString(), "USER");
+        try {
+            this.setUserRole(user.getUserId().toString(), "USER");
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
         user.setRole(UserRole.USER);
 
         userRepository.save(user);
+    }
+
+    public ResponseEntity<?> blockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+        try {
+            this.setLockedClaim(user.getUserId().toString(), true);
+            notificationService.notifyUserOfAccountBan(userId);
+            user.setLocked(true);
+            userRepository.save(user);
+            return ResponseEntity.ok().body("User was blocked");
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<?> unblockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+        try {
+            this.setLockedClaim(user.getUserId().toString(), false);
+            user.setLocked(false);
+            userRepository.save(user);
+            return ResponseEntity.ok().body("User was unblocked");
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

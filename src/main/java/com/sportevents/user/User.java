@@ -26,7 +26,7 @@ public class User {
     private String username;
     private String email;
     private UserRole role;
-    private boolean isLocked;
+    private boolean locked = false;
     private float lastLat;
     private float lastLng;
     private float rangePreference;

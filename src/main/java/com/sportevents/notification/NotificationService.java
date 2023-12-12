@@ -93,5 +93,19 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    public void notifyUserOfEventCancellation(Long userId, Long eventId) {
+        Notification notification = new Notification("Event cancelled!",
+                "Event you are participating in was cancelled!");
+        notification.setUserId(userId);
+        notification.setEventId(eventId);
+        notificationRepository.save(notification);
+    }
+
+    public void notifyUserOfAccountBan(Long userId) {
+        Notification notification = new Notification("Account banned!",
+                "Your account was locked by the administrator!");
+        notification.setUserId(userId);
+        notificationRepository.save(notification);
+    }
 
 }

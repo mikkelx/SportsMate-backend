@@ -45,18 +45,6 @@ public class UserController {
         return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserRole()));
     }
 
-    @GetMapping("/block")
-    public ResponseEntity<?> blockUser(@RequestParam Long userId) {
-        User user = userService.blockUser(userId);
-        return ResponseEntity.ok().body(user);
-    }
-
-    @GetMapping("/unblock")
-    public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
-        User user = userService.unblockUser(userId);
-        return ResponseEntity.ok().body(user);
-    }
-
     @PutMapping("/location")
     public ResponseEntity<?> setLocation(@RequestBody Location userLastLocation) {
         userService.setLocation(userLastLocation);

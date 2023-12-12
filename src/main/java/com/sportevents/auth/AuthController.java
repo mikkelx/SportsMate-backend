@@ -1,6 +1,7 @@
 package com.sportevents.auth;
 
 import com.sportevents.request.RegisterRequest;
+import com.sportevents.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,4 +37,13 @@ public class AuthController {
         return ResponseEntity.ok().body("User access was granted");
     }
 
+    @GetMapping("/block")
+    public ResponseEntity<?> blockUser(@RequestParam Long userId) {
+        return authService.blockUser(userId);
+    }
+
+    @GetMapping("/unblock")
+    public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
+        return authService.unblockUser(userId);
+    }
 }

@@ -5,6 +5,8 @@ import com.sportevents.auth.AuthService;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.location.Location;
+import com.sportevents.notification.NotificationRepository;
+import com.sportevents.notification.NotificationService;
 import com.sportevents.sport.Sport;
 import com.sportevents.sport.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +23,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final SportRepository sportRepository;
     private final EventRepository eventRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public UserService(UserRepository userRepository, SportRepository sportRepository, EventRepository eventRepository) {
+    public UserService(UserRepository userRepository, SportRepository sportRepository,
+                       EventRepository eventRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.eventRepository = eventRepository;
+        this.notificationService = notificationService;
     }
 
     public User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
-    }
-
-    public User blockUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
-        user.setLocked(true);
-        return userRepository.save(user);
-    }
-
-    public User unblockUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
-        user.setLocked(false);
-        return userRepository.save(user);
     }
 
     public User setSportPreference(Long sportId) {
