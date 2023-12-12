@@ -24,4 +24,16 @@ public class AuthController {
         return authService.register(registerRequest);
     }
 
+    @GetMapping("/access/admin")
+    public ResponseEntity<?> grantAdminAccess(@RequestParam Long userId) {
+        authService.grantAdminAccess(userId);
+        return ResponseEntity.ok().body("Admin access was granted");
+    }
+
+    @GetMapping("/access/user")
+    public ResponseEntity<?> grantUserAccess(@RequestParam Long userId) {
+        authService.grantUserAccess(userId);
+        return ResponseEntity.ok().body("User access was granted");
+    }
+
 }

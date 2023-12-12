@@ -2,6 +2,7 @@ package com.sportevents.user;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sportevents.common.UserRole;
 import com.sportevents.event.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class User {
     private Long userId;
     private String username;
     private String email;
+    private UserRole role;
     private boolean isLocked;
     private float lastLat;
     private float lastLng;

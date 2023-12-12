@@ -1,5 +1,6 @@
 package com.sportevents.user;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.sportevents.auth.AuthService;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
@@ -9,7 +10,9 @@ import com.sportevents.sport.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -130,4 +133,5 @@ public class UserService {
         return userRepository.findAll().stream().filter(
                 user -> !Objects.equals(user.getUserId(), AuthService.getCurrentUserId()));
     }
+
 }
