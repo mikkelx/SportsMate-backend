@@ -79,7 +79,7 @@ public class NotificationService {
 
     public void notifyUserOfDeletedComment(Long userId, Long eventId) {
         Notification notification = new Notification("Comment deleted!",
-                "Your comment was deleted by the admin!");
+                "Your comment was deleted by the administrator!");
         notification.setUserId(userId);
         notification.setEventId(eventId);
         notificationRepository.save(notification);

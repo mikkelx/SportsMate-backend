@@ -6,6 +6,7 @@ import com.sportevents.dto.CommentDto;
 import com.sportevents.event.Event;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.exception.RequestException;
 import com.sportevents.notification.NotificationService;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
@@ -86,7 +87,7 @@ public class CommentService {
                 notificationService.notifyUserOfDeletedComment(comment.getAuthor().getUserId(), eventId);
                 return;
             }
-            throw new RuntimeException("You are not the author of this comment");
+            throw new RequestException("You are not the author of this comment");
         }
 
         commentRepository.delete(comment);

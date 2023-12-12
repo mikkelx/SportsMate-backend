@@ -1,7 +1,6 @@
 package com.sportevents.event;
 
-import com.sportevents.location.Location;
-import com.sportevents.request.EventCreateRequest;
+import com.sportevents.request.EventRequest;
 import com.sportevents.request.FilterCriteria;
 import com.sportevents.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class EventController {
     //TODO - add new fields to event creation
     @PostMapping
     @Transactional
-    public ResponseEntity<?> createEvent(@RequestBody EventCreateRequest eventRequest) {
+    public ResponseEntity<?> createEvent(@RequestBody EventRequest eventRequest) {
         Event event = eventService.createEvent(eventRequest);
         return ResponseEntity.ok(event);
     }
@@ -71,8 +70,14 @@ public class EventController {
 
     @PostMapping("/start")
     @Transactional
-    public ResponseEntity<?> startEventById(Long eventId) {
+    public ResponseEntity<?> startEventById(@RequestParam Long eventId) {
         return eventService.startEvent(eventId);
+    }
+
+    @PostMapping("/update")
+    @Transactional
+    public ResponseEntity<?> updateEvent(@RequestParam Long eventId, @RequestBody EventRequest eventRequest) {
+        return eventService.updateEvent(eventId, eventRequest);
     }
 
     @DeleteMapping

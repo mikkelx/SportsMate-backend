@@ -97,8 +97,7 @@ public class AuthService {
     }
 
     private boolean checkIfUserExistsByUsername(String username) {
-        boolean exists = userRepository.existsByUsername(username);
-        return exists;
+        return userRepository.existsByUsername(username);
     }
 
     private boolean isEmailValid(String email) {
