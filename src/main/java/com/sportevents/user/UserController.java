@@ -35,12 +35,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/block")
-    public ResponseEntity<?> blockUser(@RequestParam Long userId) {
-        User user = userService.blockUser(userId);
-        return ResponseEntity.ok().body(user);
-    }
-
     @GetMapping("/id")
     public ResponseEntity<?> getMyId() {
         return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserId().toString()));
@@ -51,7 +45,13 @@ public class UserController {
         return ResponseEntity.ok().body(new Message(AuthService.getCurrentUserRole()));
     }
 
-    @PutMapping("/unblock")
+    @GetMapping("/block")
+    public ResponseEntity<?> blockUser(@RequestParam Long userId) {
+        User user = userService.blockUser(userId);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @GetMapping("/unblock")
     public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
         User user = userService.unblockUser(userId);
         return ResponseEntity.ok().body(user);
@@ -101,5 +101,11 @@ public class UserController {
         userService.setRangePreference(range);
         return ResponseEntity.ok().body("Range preference was set");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok().body(userService.getAllUsers());
+    }
+
 
 }

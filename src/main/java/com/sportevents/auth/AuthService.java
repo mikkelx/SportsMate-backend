@@ -3,6 +3,8 @@ package com.sportevents.auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.sportevents.common.UserRole;
+import com.sportevents.exception.NotFoundException;
 import com.sportevents.request.RegisterRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
@@ -73,6 +75,8 @@ public class AuthService {
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
+        user.setLocked(false);
+        user.setRole(UserRole.USER);
         user.resetLocation();
         user = userRepository.save(user);
 
@@ -117,11 +121,11 @@ public class AuthService {
         return false;
     }
 
-    private void setUserRole(String id, String role) {
+    private void setUserRole(String userId, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         try {
-            firebaseAuth.setCustomUserClaims(id, claims);
+            firebaseAuth.setCustomUserClaims(userId, claims);
         } catch (FirebaseAuthException e) {
             log.error("Error while assigning user role");
         }
@@ -179,4 +183,23 @@ public class AuthService {
         return true;
     }
 
+    public void grantAdminAccess(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+
+        this.setUserRole(user.getUserId().toString(), "ADMIN");
+        user.setRole(UserRole.ADMIN);
+
+        userRepository.save(user);
+    }
+
+    public void grantUserAccess(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+
+        this.setUserRole(user.getUserId().toString(), "USER");
+        user.setRole(UserRole.USER);
+
+        userRepository.save(user);
+    }
 }
