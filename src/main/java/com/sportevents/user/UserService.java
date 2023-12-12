@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -123,5 +124,10 @@ public class UserService {
 
         user.setSportPreferences(sportPreferences);
         userRepository.save(user);
+    }
+
+    public Object getAllUsers() {
+        return userRepository.findAll().stream().filter(
+                user -> !Objects.equals(user.getUserId(), AuthService.getCurrentUserId()));
     }
 }
