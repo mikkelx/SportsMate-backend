@@ -2,8 +2,8 @@ package com.sportevents.event;
 
 import com.sportevents.auth.AuthService;
 import com.sportevents.comment.CommentService;
-import com.sportevents.exception.RequestException;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.exception.RequestException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.notification.NotificationService;

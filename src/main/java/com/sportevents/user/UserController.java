@@ -1,6 +1,5 @@
 package com.sportevents.user;
 
-import com.google.api.gax.rpc.UnauthenticatedException;
 import com.sportevents.auth.AuthService;
 import com.sportevents.dto.Message;
 import com.sportevents.exception.UnauthorizedException;

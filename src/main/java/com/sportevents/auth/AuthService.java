@@ -7,7 +7,6 @@ import com.sportevents.request.RegisterRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.Jar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;

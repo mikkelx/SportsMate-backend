@@ -1,8 +1,8 @@
 package com.sportevents.exception.handler;
 
-import com.sportevents.exception.RequestException;
 import com.sportevents.exception.NotFoundException;
 import com.sportevents.exception.RegisterException;
+import com.sportevents.exception.RequestException;
 import com.sportevents.exception.UnauthorizedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,5 @@
 package com.sportevents.comment;
 
-import com.google.rpc.context.AttributeContext;
 import com.sportevents.auth.AuthService;
 import com.sportevents.dto.CommentDto;
 import com.sportevents.event.Event;
