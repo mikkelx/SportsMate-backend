@@ -212,12 +212,13 @@ public class AuthService {
 
         try {
             this.setUserRole(user.getUserId().toString(), "ADMIN");
+            user.setRole(UserRole.ADMIN);
+            userRepository.save(user);
+            notificationService.notifyUserOfNewRole(userId, "ADMIN");
         } catch (FirebaseAuthException e) {
             throw new RuntimeException(e);
         }
-        user.setRole(UserRole.ADMIN);
 
-        userRepository.save(user);
     }
 
     public void grantUserAccess(Long userId) {
@@ -226,12 +227,12 @@ public class AuthService {
 
         try {
             this.setUserRole(user.getUserId().toString(), "USER");
+            user.setRole(UserRole.USER);
+            userRepository.save(user);
+            notificationService.notifyUserOfNewRole(userId, "USER");
         } catch (FirebaseAuthException e) {
             throw new RuntimeException(e);
         }
-        user.setRole(UserRole.USER);
-
-        userRepository.save(user);
     }
 
     public ResponseEntity<?> blockUser(Long userId) {

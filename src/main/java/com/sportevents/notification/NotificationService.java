@@ -108,4 +108,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    public void notifyUserOfNewRole(Long userId, String role) {
+        Notification notification = new Notification("Role changed!",
+                "Your role was changed to " + role + " by the administrator!");
+        notification.setUserId(userId);
+        notificationRepository.save(notification);
+    }
 }
