@@ -85,4 +85,13 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    public void notifyUserOfEventUpdate(Long userId, Long eventId) {
+        Notification notification = new Notification("Event update!",
+                "Event you are participating in was updated!");
+        notification.setUserId(userId);
+        notification.setEventId(eventId);
+        notificationRepository.save(notification);
+    }
+
+
 }

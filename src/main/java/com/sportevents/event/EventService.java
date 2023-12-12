@@ -251,6 +251,16 @@ public class EventService {
         locationRepository.save(event.getLocation());
         eventRepository.save(event);
 
+        //notify participants of event update
+        userRepository.findUsersByJoinedEvents_eventId(eventId).
+                forEach(user -> {
+                    if(!Objects.equals(user.getUserId(), AuthService.getCurrentUserId())) {
+                        notificationService.notifyUserOfEventUpdate(user.getUserId(), eventId);
+
+                    }
+        });
+
+
         return ResponseEntity.ok().body("");
     }
 }

@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
         boolean existsByUsername(String username);
 
+        List<User> findAllByJoinedEvents_eventId(Long eventId);
+
 }
