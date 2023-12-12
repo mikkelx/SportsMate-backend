@@ -247,6 +247,8 @@ public class EventService {
         event.setSport(eventRequest.getSport());
         event.setValues(eventRequest.getValues());
 
+
+        locationRepository.save(event.getLocation());
         eventRepository.save(event);
 
         return ResponseEntity.ok().body("");
