@@ -2,12 +2,12 @@ package com.sportevents.event;
 
 import com.sportevents.auth.AuthService;
 import com.sportevents.comment.CommentService;
-import com.sportevents.exception.EventCreateException;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.exception.RequestException;
 import com.sportevents.location.Location;
 import com.sportevents.location.LocationRepository;
 import com.sportevents.notification.NotificationService;
-import com.sportevents.request.EventCreateRequest;
+import com.sportevents.request.EventRequest;
 import com.sportevents.request.FilterCriteria;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
@@ -52,7 +52,7 @@ public class EventService {
         this.notificationService = notificationService;
     }
 
-    public Event createEvent(EventCreateRequest eventRequest) {
+    public Event createEvent(EventRequest eventRequest) {
         Event event = convertEventRequestToEntity(eventRequest);
 
         event.setOrganizerId(AuthService.getCurrentUserId());
@@ -61,7 +61,7 @@ public class EventService {
 
         if(new Date().after(event.getDate())) {
             log.info("You cannot create event in the past!");
-            throw new EventCreateException("You cannot create event in the past!");
+            throw new RequestException("You cannot create event in the past!");
         }
 
         locationRepository.save(event.getLocation());
@@ -91,7 +91,7 @@ public class EventService {
         return event;
     }
 
-    private Event convertEventRequestToEntity(EventCreateRequest eventCreateRequest) {
+    private Event convertEventRequestToEntity(EventRequest eventCreateRequest) {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
         return modelMapper.map(eventCreateRequest,Event.class);
@@ -129,27 +129,6 @@ public class EventService {
                 .collect(Collectors.toList());
 
     }
-
-//    public List<Event> getEventsByRangeAndSport(Location myLocation, Float range, Long sportId) {
-//        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportId(true, sportId);
-//
-//        return eventsList.stream()
-//                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
-//                .peek(event -> {
-//                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<Event> getEventsByRangeAndSportAndDate(Location myLocation, Float range, Long sportId, Date date) {
-//        List<Event> eventsList = eventRepository.findAllByActiveAndSport_sportIdAndDateAfter(true, sportId, date);
-//
-//        return eventsList.stream()
-//                .filter(event-> calculateDistance(myLocation, event.getLocation()) <= range)
-//                .peek(event -> {
-//                    event.setDistance(calculateDistance(myLocation, event.getLocation()));})
-//                .collect(Collectors.toList());
-//    }
-
 
     public ResponseEntity<?> joinEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
@@ -206,13 +185,6 @@ public class EventService {
             return ResponseEntity.badRequest().body("Cannot delete somebody's event!");
         }
 
-
-
-//        User user = userRepository.findById(AuthService.getCurrentUserId())
-//                .orElseThrow(() -> new NotFoundException("User not found"));
-//        user.leaveEvent(event);
-//        userRepository.save(user);
-
         event.getUsers().forEach(user -> user.leaveEvent(event));
         eventRepository.save(event);
 
@@ -256,4 +228,39 @@ public class EventService {
     }
 
 
+    public ResponseEntity<?> updateEvent(Long eventId, EventRequest eventRequest) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id: " + eventId + " not found"));
+
+        if(!AuthService.getCurrentUserId().equals(event.getOrganizerId())) {
+            return ResponseEntity.badRequest().body("Cannot update somebody's event!");
+        }
+
+        event.setTitle(eventRequest.getTitle());
+        event.setDate(eventRequest.getDate());
+        event.setDescription(eventRequest.getDescription());
+        event.setMaxParticipantsNumber(eventRequest.getMaxParticipantsNumber());
+        event.setCyclical(eventRequest.isCyclical());
+        event.setCyclicalPeriodInDays(eventRequest.getCyclicalPeriodInDays());
+        event.setSportLevel(eventRequest.getSportLevel());
+        event.setLocation(eventRequest.getLocation());
+        event.setSport(eventRequest.getSport());
+        event.setValues(eventRequest.getValues());
+
+
+        locationRepository.save(event.getLocation());
+        eventRepository.save(event);
+
+        //notify participants of event update
+        userRepository.findUsersByJoinedEvents_eventId(eventId).
+                forEach(user -> {
+                    if(!Objects.equals(user.getUserId(), AuthService.getCurrentUserId())) {
+                        notificationService.notifyUserOfEventUpdate(user.getUserId(), eventId);
+
+                    }
+        });
+
+
+        return ResponseEntity.ok().body("");
+    }
 }

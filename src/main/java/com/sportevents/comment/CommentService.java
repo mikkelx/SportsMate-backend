@@ -5,6 +5,8 @@ import com.sportevents.dto.CommentDto;
 import com.sportevents.event.Event;
 import com.sportevents.event.EventRepository;
 import com.sportevents.exception.NotFoundException;
+import com.sportevents.exception.RequestException;
+import com.sportevents.notification.NotificationService;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,15 @@ public class CommentService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
+    private final NotificationService notificationService;
+
     @Autowired
-    public CommentService(CommentRepository commentRepository, EventRepository eventRepository, UserRepository userRepository) {
+    public CommentService(CommentRepository commentRepository, EventRepository eventRepository,
+                          UserRepository userRepository, NotificationService notificationService) {
         this.commentRepository = commentRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -73,6 +79,16 @@ public class CommentService {
         if (!comment.getEvent().getEventId().equals(eventId)) {
             throw new RuntimeException("Comment does not belong to the event");
         }
+
+        if(comment.getAuthor().getUserId() != AuthService.getCurrentUserId() ) {
+            if(AuthService.isAdmin()) {
+                commentRepository.delete(comment);
+                notificationService.notifyUserOfDeletedComment(comment.getAuthor().getUserId(), eventId);
+                return;
+            }
+            throw new RequestException("You are not the author of this comment");
+        }
+
         commentRepository.delete(comment);
     }
 

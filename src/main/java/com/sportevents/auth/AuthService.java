@@ -7,7 +7,6 @@ import com.sportevents.request.RegisterRequest;
 import com.sportevents.user.User;
 import com.sportevents.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.Jar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +38,10 @@ public class AuthService {
     public static String getCurrentUserRole() {
         String role = (String)SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().collect(Collectors.toList()).get(0).toString();
         return role;
+    }
+
+    public static boolean isAdmin() {
+        return getCurrentUserRole().equals("ADMIN");
     }
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
@@ -93,8 +96,7 @@ public class AuthService {
     }
 
     private boolean checkIfUserExistsByUsername(String username) {
-        boolean exists = userRepository.existsByUsername(username);
-        return exists;
+        return userRepository.existsByUsername(username);
     }
 
     private boolean isEmailValid(String email) {

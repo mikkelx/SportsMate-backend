@@ -15,7 +15,7 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventCreateRequest {
+public class EventRequest {
     private String title;
     private Date date;
     private String description;

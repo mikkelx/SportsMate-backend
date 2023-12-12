@@ -77,4 +77,21 @@ public class NotificationService {
         );
     }
 
+    public void notifyUserOfDeletedComment(Long userId, Long eventId) {
+        Notification notification = new Notification("Comment deleted!",
+                "Your comment was deleted by the administrator!");
+        notification.setUserId(userId);
+        notification.setEventId(eventId);
+        notificationRepository.save(notification);
+    }
+
+    public void notifyUserOfEventUpdate(Long userId, Long eventId) {
+        Notification notification = new Notification("Event update!",
+                "Event you are participating in was updated!");
+        notification.setUserId(userId);
+        notification.setEventId(eventId);
+        notificationRepository.save(notification);
+    }
+
+
 }
