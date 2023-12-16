@@ -37,10 +37,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             if (firebaseToken != null) {
                 String userId = firebaseToken.getUid();
-
                 List<GrantedAuthority> authorities = extractRole(userId, firebaseToken);
-                System.out.println("Logged user: " + userId);
-                System.out.println("Logged user role: " + authorities);
+                logger.info("User with id " + userId + " was authenticated with role " + authorities.get(0).getAuthority());
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

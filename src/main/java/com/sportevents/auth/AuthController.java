@@ -25,24 +25,24 @@ public class AuthController {
         return authService.register(registerRequest);
     }
 
-    @GetMapping("/access/admin")
+    @GetMapping("/admin/access/admin")
     public ResponseEntity<?> grantAdminAccess(@RequestParam Long userId) {
         authService.grantAdminAccess(userId);
         return ResponseEntity.ok().body("Admin access was granted");
     }
 
-    @GetMapping("/access/user")
+    @GetMapping("/admin/access/user")
     public ResponseEntity<?> grantUserAccess(@RequestParam Long userId) {
         authService.grantUserAccess(userId);
         return ResponseEntity.ok().body("User access was granted");
     }
 
-    @GetMapping("/block")
+    @GetMapping("/admin/block")
     public ResponseEntity<?> blockUser(@RequestParam Long userId) {
         return authService.blockUser(userId);
     }
 
-    @GetMapping("/unblock")
+    @GetMapping("/admin/unblock")
     public ResponseEntity<?> unblockUser(@RequestParam Long userId) {
         return authService.unblockUser(userId);
     }
