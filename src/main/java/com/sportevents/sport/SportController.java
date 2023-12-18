@@ -12,37 +12,47 @@ import java.util.List;
 @RequestMapping("/api/sport")
 public class SportController {
 
-    private final SportRepository sportRepository;
+    private final SportService sportService;
 
     @Autowired
-    public SportController(SportRepository sportRepository) {
-        this.sportRepository = sportRepository;
+    public SportController(SportService sportService) {
+        this.sportService = sportService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> createSport(@RequestBody Sport sport) {
-        return ResponseEntity.ok().body(sportRepository.save(sport));
+        return ResponseEntity.ok().body(sportService.createSport(sport));
     }
 
     @GetMapping
     public ResponseEntity<?> getSportById(@RequestParam Long sportId) {
-        return ResponseEntity.ok().body(sportRepository.findById(sportId));
+        return ResponseEntity.ok().body(sportService.getSportById(sportId));
     }
 
     @PostMapping("/name")
     public ResponseEntity<?> getSportByName(@RequestBody Message message) {
-        return ResponseEntity.ok().body(sportRepository.findBySportName(message.getMessage()));
+        return ResponseEntity.ok().body(sportService.getSportByName(message.getMessage()));
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Sport>> getAllSports() {
-        return ResponseEntity.ok().body(sportRepository.findAll());
+        return ResponseEntity.ok().body(sportService.getAllSports());
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteSport(@RequestParam Long sportId) {
-        sportRepository.deleteById(sportId);
-        return ResponseEntity.ok().body("Sport deleted");
+    @PostMapping("/update")
+    public ResponseEntity<?> updateSport(@RequestBody Sport sport) {
+        return ResponseEntity.ok().body(sportService.updateSport(sport));
     }
+
+    @PostMapping("/update/multiple")
+    public ResponseEntity<?> updateMultipleSports(@RequestBody List<Sport> sports) {
+        return ResponseEntity.ok().body(sportService.updateMultipleSports(sports));
+    }
+
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<?> deleteSport(@RequestParam Long sportId) {
+//        sportRepository.deleteById(sportId);
+//        return ResponseEntity.ok().body("Sport deleted");
+//    }
 
 }

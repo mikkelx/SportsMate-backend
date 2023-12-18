@@ -33,6 +33,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/admin").hasAuthority("ADMIN")
                         .requestMatchers("/api/user/all").hasAuthority("ADMIN")
+                        .requestMatchers("/api/sport/update", "/api/sport/create").hasAuthority("ADMIN")
                         .requestMatchers("/api/auth/register").permitAll()
                         .anyRequest().authenticated()
         );

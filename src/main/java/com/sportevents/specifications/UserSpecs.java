@@ -31,7 +31,7 @@ public class UserSpecs {
                 predicates.add(criteriaBuilder.isMember(sportId, root.get("sportPreferences")));
             }
 
-            predicates.add(criteriaBuilder.equal(root.get("isLocked"), false));
+            predicates.add(criteriaBuilder.equal(root.get("locked"), false));
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
