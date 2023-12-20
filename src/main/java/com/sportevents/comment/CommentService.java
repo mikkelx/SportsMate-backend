@@ -34,6 +34,10 @@ public class CommentService {
 
     @Transactional
     public void addComment(Long eventId, CommentDto commentDto) {
+        if(commentDto.getContent().length() > 300) {
+            throw new RequestException("Comment is too long");
+        }
+
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
 

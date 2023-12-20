@@ -21,7 +21,6 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<?> addComment(@PathVariable Long eventId, @RequestBody CommentDto commentDto) {
-        System.out.println(commentDto.getContent());
         commentService.addComment(eventId, commentDto);
         return new ResponseEntity<>("Comment added successfully", HttpStatus.CREATED);
     }
