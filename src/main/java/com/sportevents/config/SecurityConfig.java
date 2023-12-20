@@ -37,7 +37,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll()
                         .anyRequest().authenticated()
         );
-        http.csrf().disable().cors();
+        http.csrf().disable();
+        http.cors();
 
         return http.build();
     }
@@ -46,10 +47,9 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://frontend:3000")); // replace with your url
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://localhost:3000")); // replace with your url
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
