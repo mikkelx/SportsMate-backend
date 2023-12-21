@@ -51,27 +51,27 @@ public class AuthService {
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         if(!isRegisterRequestValid(registerRequest)) {
-            return ResponseEntity.badRequest().body("Wprowadź wszystkie dane");
+            return ResponseEntity.badRequest().body("Type correct data");
         }
 
         if(!isEmailValid(registerRequest.getEmail())) {
-            return ResponseEntity.badRequest().body("Niepoprawny adres email");
+            return ResponseEntity.badRequest().body("Invalid email");
         }
 
         if(checkIfUserExistsByEmail(registerRequest.getEmail())) {
-            return ResponseEntity.status(409).body("Użytkownik o adresie " + registerRequest.getEmail() + " email już istnieje");
+            return ResponseEntity.status(409).body("User with email " + registerRequest.getEmail() + " already exists");
         }
 
         if(checkIfUserExistsByUsername(registerRequest.getUsername())) {
-            return ResponseEntity.status(409).body("Użytkownik o nazwie " + registerRequest.getUsername() + " już istnieje");
+            return ResponseEntity.status(409).body("User with name " + registerRequest.getUsername() + " already exists");
         }
 
         if(!registerRequest.getPassword().equals(registerRequest.getPasswordRepeated())) {
-            return ResponseEntity.badRequest().body("Hasła nie są takie same");
+            return ResponseEntity.badRequest().body("Passwords do not match");
         }
 
         if(!verifyPassword(registerRequest.getPassword(), registerRequest.getPasswordRepeated())) {
-            return ResponseEntity.badRequest().body("Hasło nie spełnia wymagań, jest za słabe");
+            return ResponseEntity.badRequest().body("Password does not match the requirements");
         }
         
 
@@ -92,8 +92,8 @@ public class AuthService {
 
         try{
             UserRecord createdUser = firebaseAuth.createUser(request);
-            this.setUserRole(createdUser.getUid(), "USER");
-            this.setLockedClaim(createdUser.getUid(), false);
+            this.setUserRole(user.getUserId().toString(), "USER");
+            this.setLockedClaim(user.getUserId().toString(), false);
             return ResponseEntity.status(201).body("Użytkownik został zarejestrowany");
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);

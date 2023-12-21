@@ -37,12 +37,6 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-//    @PostMapping("/nearby")
-//    @Transactional
-//    public ResponseEntity<List<Event>> getEventsByRange(@RequestBody Location myLocation, @RequestParam Float range) {
-//        return ResponseEntity.ok(eventService.getEventsByRange(myLocation, range));
-//    }
-
     @PostMapping("/filter")
     @Transactional
     public ResponseEntity<List<Event>> getEventsByFilter(@RequestBody FilterCriteria filterCriteria) {
