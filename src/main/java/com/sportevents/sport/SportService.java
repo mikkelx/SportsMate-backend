@@ -1,5 +1,6 @@
 package com.sportevents.sport;
 
+import com.sportevents.exception.RequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,25 +26,27 @@ public class SportService {
 
     public Sport createSport(Sport sport) {
         if (sportRepository.findBySportName(sport.getSportName()) != null) {
-            throw new RuntimeException("Sport already exists");
+            throw new RequestException("Sport already exists");
         }
 
         if(sport.getAttributes() == null) {
-            throw new RuntimeException("Sport must have attributes");
+            throw new RequestException("Sport must have attributes");
         }
 
         if(sport.getAttributes().isEmpty()) {
-            throw new RuntimeException("Sport must have attributes");
+            throw new RequestException("Sport must have attributes");
         }
 
         for(String attribute : sport.getAttributes()) {
             if(attribute.equals("")) {
-                throw new RuntimeException("Sport attributes cannot be null");
+                throw new RequestException("Sport attribute cannot be empty");
             }
         }
 
         return sportRepository.save(sport);
     }
+
+
 
     public Sport updateSport(Sport sport) {
         return sportRepository.save(sport);

@@ -92,15 +92,15 @@ public class AuthService {
 
         try{
             UserRecord createdUser = firebaseAuth.createUser(request);
-            this.setUserRole(user.getUserId().toString(), "USER");
-            this.setLockedClaim(user.getUserId().toString(), false);
-            return ResponseEntity.status(201).body("Użytkownik został zarejestrowany");
+            this.setUserRole(createdUser.getUid(), "USER");
+            this.setLockedClaim(createdUser.getUid(), false);
+            return ResponseEntity.status(201).body("User was registered");
         } catch (FirebaseAuthException e) {
             userRepository.delete(user);
             this.deleteUserFromFirebase(user.getUserId());
             log.warn("Error registering user with email: " + registerRequest.getEmail());
             log.warn(e.toString());
-            return ResponseEntity.internalServerError().body("Błąd podczas rejestracji użytkownika");
+            return ResponseEntity.internalServerError().body("Error registering user");
         }
     }
 
